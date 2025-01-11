@@ -5,6 +5,7 @@ import {Controller, useForm} from "react-hook-form";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import './dropdownStyle.css'
+import './newTaskModal.css'
 import Select from "react-select/base";
 import {useState} from "react";
 import {handleDropdownChangeRhk, handleSelectChangeRhk} from "../../utils/handlers.js";
@@ -64,12 +65,12 @@ function NewTaskModal() {
             <Modal show={isShown}
                    onHide={handleClose}
                 // dialogClassName="add-price-modal-win"
-                // contentClassName="add-price-modal-win-content"
+                contentClassName="add-task-modal-content"
                    centered>
                 <Modal.Dialog
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title>Додати ціну відповідно магазину</Modal.Title>
+                        <Modal.Title>Plan your next task</Modal.Title>
                     </Modal.Header>
                     <Modal.Body
                     >
@@ -144,7 +145,7 @@ function NewTaskModal() {
                                         }
                                     })}
                                     className="form-control border-primary align-top"
-                                    placeholder="Введіть назву магазину"
+                                    placeholder="Your original description"
                                 />
                                 {errors.shop && <span className="text-danger">{errors.shop.message}</span>}
 

@@ -1,0 +1,11 @@
+.modal-dialog {
+    /*margin: auto auto;*/
+    width: 100%;
+    height: 100%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.add-task-modal-content {
+    width: 380px;
+}
