@@ -9,6 +9,8 @@ import './newTaskModal.css'
 import Select from "react-select/base";
 import {useState} from "react";
 import {handleDropdownChangeRhk, handleSelectChangeRhk} from "../../utils/handlers.js";
+import {addNewTask} from "./newTaskModalAction.js";
+
 
 function NewTaskModal() {
 
@@ -49,6 +51,7 @@ function NewTaskModal() {
     // Custom submit handler
     const onSubmit = data => {
         console.log('Form Data:', data);
+        dispatch(addNewTask(data))
         // Handle form data here (e.g., dispatch an action or make an API call)
     };
 
@@ -136,7 +139,7 @@ function NewTaskModal() {
                             <Form.Group className="mb-3">
                                 <label className="mb-2">Description</label>
                                 <textarea
-                                    style={{height: "350px"}}
+                                    style={{height: "250px"}}
                                     {...register("description", {
                                         required: "Enter description",
                                         pattern: {
