@@ -1,0 +1,18 @@
+.card-task-outline {
+    outline-color: #646cff;
+    border-color: #747bff;
+    width: 300px;
+    height: 200px;
+    border-width: thin;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.high-priority {
+    background-color: rgba(255, 182, 193, 0.2);
+}
+
+.low-priority {
+    background-color: rgba(144, 238, 144, 0.2)
+}
