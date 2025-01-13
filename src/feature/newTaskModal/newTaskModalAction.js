@@ -9,12 +9,12 @@ export const addNewTask = createAsyncThunk(
         const currentDate = new Date();
         const fullTaskObj = {
             "completed": 0,
-            "complexity": null,
+            "complexity": taskObj.complexityValue?.value || null,
             "creation_date": getFormattedDateTime(currentDate, "DD.MM.YYYY HH:mm:ss"),
             "completion_date": null,
             "is_template": 0,
             "postponed_status": 0,
-            "priority": "Low",
+            "priority": taskObj.priorityValue?.value || null,
             "repeated": 0,
             "description": taskObj.description,
             "name": taskObj.name

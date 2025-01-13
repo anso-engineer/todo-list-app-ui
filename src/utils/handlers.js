@@ -7,8 +7,8 @@ export const handleSelectChangeRhk = (field, propName, setValueFunc, triggerFunc
 
 
 export const handleDropdownChangeRhk = (drowndoanList, field, propName, setValueFunc, triggerFunc) => (eventKey)  => {
-    const value = Object.keys(drowndoanList).find(key => drowndoanList[key] === eventKey);
-    field.onChange(value)
-    setValueFunc(propName, value); // Update the form state
+    const foundKey = Object.keys(drowndoanList).find(key => drowndoanList[key].value === eventKey.value);
+    field.onChange(drowndoanList[foundKey])
+    setValueFunc(propName, drowndoanList[foundKey]); // Update the form state
     triggerFunc(propName); // Trigger validation
 };

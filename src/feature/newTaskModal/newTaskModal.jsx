@@ -6,10 +6,9 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import './dropdownStyle.css'
 import './newTaskModal.css'
-import Select from "react-select/base";
-import {useState} from "react";
-import {handleDropdownChangeRhk, handleSelectChangeRhk} from "../../utils/handlers.js";
+import {handleDropdownChangeRhk} from "../../utils/handlers.js";
 import {addNewTask} from "./newTaskModalAction.js";
+import {useEffect} from "react";
 
 
 function NewTaskModal() {
@@ -47,6 +46,10 @@ function NewTaskModal() {
         formState: {errors}
     } = form;
 
+    useEffect(() => {
+        register("complexityValue")
+        register("priorityValue")
+    }, [register]);
 
     // Custom submit handler
     const onSubmit = data => {
@@ -56,11 +59,15 @@ function NewTaskModal() {
     };
 
     // Prevent form submission by default and use handleSubmit for controlled submission
-    const handleFormSubmit = handleSubmit(onSubmit);
+    const handleFormSubmit = handleSubmit(
+        onSubmit
+    );
 
     function handleClose() {
         dispatch(setIsModalShown(false))
+        console.log(errors)
     }
+
 
 
     return (
@@ -126,7 +133,7 @@ function NewTaskModal() {
                                     {...register("name", {
                                         required: "Enter is mandatory",
                                         pattern: {
-                                            value: /^.{5,10}$/,
+                                            value: /^.{1,30}$/,
                                             message: "Please enter name"
                                         }
                                     })}
@@ -134,7 +141,7 @@ function NewTaskModal() {
                                     type="text"
                                     placeholder="Name for the future task"
                                 />
-                                {errors.price && <span className="text-danger">{errors.price.message}</span>}
+                                {errors.name && <span className="text-danger">{errors.name.message}</span>}
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <label className="mb-2">Description</label>
@@ -150,7 +157,7 @@ function NewTaskModal() {
                                     className="form-control border-primary align-top"
                                     placeholder="Your original description"
                                 />
-                                {errors.shop && <span className="text-danger">{errors.shop.message}</span>}
+                                {errors.description && <span className="text-danger">{errors.description.message}</span>}
 
 
 
