@@ -31,10 +31,10 @@ export function Tasks() {
             ?
                 ( <div className="container mt-4">
                     <h2>Task List</h2>
-                    <div className="row">
+                    <div className="row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '16px' }}>
                         {tasks.map((task, index) => (
                             task?.completed === 0 &&
-                            <div className="col-md-4 mb-3" key={task.id}>
+                            <div className="col-12 col-md-6 col-sm-6 mb-3" key={task.id}>
                                 <TaskCard id={task.id} name={task.name} description={task.description}
                                     creationDate={task.creation_date} priority={task.priority}
                                     complexity={task.complexity} doneBtn={task.completed}

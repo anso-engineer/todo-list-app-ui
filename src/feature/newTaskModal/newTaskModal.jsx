@@ -9,6 +9,7 @@ import './newTaskModal.css'
 import {handleDropdownChangeRhk} from "../../utils/handlers.js";
 import {addNewTask} from "./newTaskModalAction.js";
 import {useEffect} from "react";
+import {setShouldUpdateTasks} from "../tasks/taskSlice.js";
 
 
 function NewTaskModal() {
@@ -55,6 +56,7 @@ function NewTaskModal() {
     const onSubmit = data => {
         console.log('Form Data:', data);
         dispatch(addNewTask(data))
+        dispatch(setIsModalShown(false))
         // Handle form data here (e.g., dispatch an action or make an API call)
     };
 
@@ -69,13 +71,12 @@ function NewTaskModal() {
     }
 
 
-
     return (
         <div>
             <Modal show={isShown}
                    onHide={handleClose}
                 // dialogClassName="add-price-modal-win"
-                contentClassName="add-task-modal-content"
+                   contentClassName="add-task-modal-content"
                    centered>
                 <Modal.Dialog
                 >
@@ -85,14 +86,22 @@ function NewTaskModal() {
                     <Modal.Body
                     >
                         <Form onSubmit={handleFormSubmit}>
-                            <Form.Group >
+                            <Form.Group>
                                 <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-
-                                    <div style={{width:'48%'}}>
-                                        <label>Priority</label>
+                                    <div style={{width: '48%'}}>
+                                        {errors.priorityValue ? (
+                                            <span className="text-danger">
+                                                Priority can be empty
+                                            </span>
+                                        ) : (
+                                            <label>Priority</label>
+                                        )}
                                         <Controller
                                             name="priorityValue"
                                             control={control}
+                                            rules={{
+                                                required: 'Priority can be empty', // Validation rule
+                                            }}
                                             render={({field}) => (
                                                 <Dropdown options={priorityOptions}
                                                           controlClassName="dropdown-custom-primary"
@@ -100,12 +109,11 @@ function NewTaskModal() {
                                                               "priorityValue", setValue, trigger)}
                                                           value={watch("priorityValue")}
                                                           placeholder="Select an option"
-
                                                 />
                                             )}
                                         />
                                     </div>
-                                    <div style={{width:'48%'}}>
+                                    <div style={{width: '48%'}}>
                                         <label>Complexity</label>
                                         <Controller
                                             name="complexityValue"
@@ -118,7 +126,6 @@ function NewTaskModal() {
                                                           value={watch("complexityValue")}
                                                           placeholder="Select an option"
                                                           style={{width: "50%", borderColor: "blue"}}
-
                                                 />
                                             )}
                                         />
@@ -131,11 +138,13 @@ function NewTaskModal() {
                                 <label className="mb-2">Name</label>
                                 <input
                                     {...register("name", {
-                                        required: "Enter is mandatory",
-                                        pattern: {
-                                            value: /^.{1,30}$/,
-                                            message: "Please enter name"
-                                        }
+                                        required: "Empty name isn't allowed",
+                                        validate: {
+                                            minLength: (value) =>
+                                                value.length >= 6 || "Text must be at least 6 characters long",
+                                            maxLength: (value) =>
+                                                value.length <= 45 || `You exceeded the text length by ${value.length - 45} symbols`,
+                                        },
                                     })}
                                     className="form-control border-primary"
                                     type="text"
@@ -148,19 +157,17 @@ function NewTaskModal() {
                                 <textarea
                                     style={{height: "250px"}}
                                     {...register("description", {
-                                        required: "Enter description",
-                                        pattern: {
-                                            value: /^.+$/, // Only Ukrainian letters, spaces, and dashes
-                                            message: "Тільки українські літери, пробіли та тире"
-                                        }
+                                        // required: "Empty description not allowed",
+                                        validate: {
+                                            maxLength: (value) =>
+                                                value.length <= 1000 || `You exceeded the title length by ${value.length - 1000} symbols`,
+                                        },
                                     })}
                                     className="form-control border-primary align-top"
                                     placeholder="Your original description"
                                 />
-                                {errors.description && <span className="text-danger">{errors.description.message}</span>}
-
-
-
+                                {errors.description &&
+                                    <span className="text-danger">{errors.description.message}</span>}
                             </Form.Group>
                             {/* Spacer div for spacing between form and buttons */}
                             <div className="spacer"/>
@@ -178,12 +185,8 @@ function NewTaskModal() {
                     </Modal.Body>
                 </Modal.Dialog>
             </Modal>
-
         </div>
-
     )
-
-
 }
 
 export default NewTaskModal
