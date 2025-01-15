@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
+import {addNewTask} from "./newTaskModalAction.js";
+import toast from "react-hot-toast";
 
 
 const initialState = {
@@ -13,6 +15,17 @@ export const newTaskModalSlice = createSlice({
             state.isModalShown = action.payload
         }
     },
+    extraReducers: (builder) => {
+        builder
+            .addCase(addNewTask.fulfilled, (state) => {
+                toast.success("Successfully added task!")
+
+            })
+            .addCase(addNewTask.rejected, (state) => {
+                toast.error("Failed to add task!")
+
+            })
+    }
 });
 
 // Action creators are generated for each case reducer function

@@ -42,6 +42,7 @@ function NewTaskModal() {
         trigger,
         control,
         watch,
+        reset,
         dirtyFields,
         handleSubmit,
         formState: {errors}
@@ -57,6 +58,7 @@ function NewTaskModal() {
         console.log('Form Data:', data);
         dispatch(addNewTask(data))
         dispatch(setIsModalShown(false))
+        reset()
         // Handle form data here (e.g., dispatch an action or make an API call)
     };
 
