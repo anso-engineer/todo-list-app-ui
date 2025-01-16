@@ -1,15 +1,22 @@
 import NewTaskModal from "../newTaskModal/newTaskModal.jsx";
 import TaskCard from "../custom/taskCard.jsx";
+import "../tasks/tasks.css"
 import {Button} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {selectIsShown, setIsModalShown} from "../newTaskModal/newTaskModalSlice.js";
 import {Tasks} from "../tasks/tasks.jsx";
 import {Toaster} from "react-hot-toast";
+import NewTaskTemplateModal from "../newTaskTemplateModal/newTaskTemplateModal.jsx";
+import {
+    selectIsTemplateModalShown,
+    setIsTemplateModalShown
+} from "../newTaskTemplateModal/newTaskTemplateModalSlice.js";
 
 function MainView() {
 
     const dispatch = useDispatch()
-    const addNewTaskModalIsShow = useSelector(selectIsShown)
+    const addNewTaskModalIsShown = useSelector(selectIsShown)
+    const addNewTaskTemplateModalIsShown = useSelector(selectIsTemplateModalShown)
 
     return (
         <div>
@@ -18,17 +25,30 @@ function MainView() {
                 reverseOrder={false}
                 gutter={8}
             />
-            <Button onClick={ () => {
-                if (!addNewTaskModalIsShow) {
-                    dispatch(setIsModalShown(true))
+            <Button
+                className="toolbar-button"
+                onClick={() => {
+                    if (!addNewTaskModalIsShown) {
+                        dispatch(setIsModalShown(true))
+                    }
                 }
-            }
-            }>
-                Add
+                }>
+                New Task
+            </Button>
+            <Button
+                className="toolbar-button"
+                onClick={() => {
+                    if (!addNewTaskTemplateModalIsShown) {
+                        dispatch(setIsTemplateModalShown(true))
+                    }
+                }
+                }>
+                Template
             </Button>
             <div>
-                <NewTaskModal isShown />
-                <Tasks />
+                <NewTaskModal isShown/>
+                <NewTaskTemplateModal isShown/>
+                <Tasks/>
             </div>
 
         </div>)

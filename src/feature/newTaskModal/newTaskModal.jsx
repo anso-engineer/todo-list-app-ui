@@ -11,6 +11,17 @@ import {addNewTask} from "./newTaskModalAction.js";
 import {useEffect} from "react";
 import {setShouldUpdateTasks} from "../tasks/taskSlice.js";
 
+export const priorityOptions = [
+    {value: 'Low', label: 'Low'},
+    {value: 'High', label: 'High'},
+]
+
+
+export const complexityOptions = [
+    {value: 'Easy', label: 'Easy'},
+    {value: 'Moderate', label: 'Moderate'},
+    {value: 'High', label: 'High'}
+]
 
 function NewTaskModal() {
 
@@ -19,17 +30,7 @@ function NewTaskModal() {
     // const [selectedPriorityOption, setSelectedPriorityOption] = useState(null);
 
 
-    const priorityOptions = [
-        {value: 'Low', label: 'Low'},
-        {value: 'High', label: 'High'},
-    ]
 
-
-    const complexityOptions = [
-        {value: 'Easy', label: 'Easy'},
-        {value: 'Moderate', label: 'Moderate'},
-        {value: 'High', label: 'High'}
-    ]
 
     const form = useForm({
         mode: "onTouched",
@@ -93,7 +94,7 @@ function NewTaskModal() {
                                     <div style={{width: '48%'}}>
                                         {errors.priorityValue ? (
                                             <span className="text-danger">
-                                                Priority can be empty
+                                                Empty not allowed
                                             </span>
                                         ) : (
                                             <label>Priority</label>
@@ -102,7 +103,7 @@ function NewTaskModal() {
                                             name="priorityValue"
                                             control={control}
                                             rules={{
-                                                required: 'Priority can be empty', // Validation rule
+                                                required: 'Empty not allowed', // Validation rule
                                             }}
                                             render={({field}) => (
                                                 <Dropdown options={priorityOptions}
@@ -116,10 +117,19 @@ function NewTaskModal() {
                                         />
                                     </div>
                                     <div style={{width: '48%'}}>
-                                        <label>Complexity</label>
+                                        {errors.priorityValue ? (
+                                            <span className="text-danger">
+                                                Empty not allowed
+                                            </span>
+                                        ) : (
+                                            <label>Complexity</label>
+                                        )}
                                         <Controller
                                             name="complexityValue"
                                             control={control}
+                                            rules={{
+                                                required: 'Empty not allowed', // Validation rule
+                                            }}
                                             render={({field}) => (
                                                 <Dropdown options={complexityOptions}
                                                           controlClassName="dropdown-custom-primary"

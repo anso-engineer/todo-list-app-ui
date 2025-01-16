@@ -25,6 +25,7 @@ export const newTaskModalSlice = createSlice({
                 toast.error("Failed to add task!")
 
             })
+
     }
 });
 
