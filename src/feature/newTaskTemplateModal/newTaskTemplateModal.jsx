@@ -62,8 +62,6 @@ function NewTaskTemplateModal() {
             "task_template_id":  data.taskTemplateValue.value,
             "priority": data.priorityValue.value || null,
             "complexity": data.complexityValue.value || null,
-
-
         }
         dispatch(addNewTaskTemplate(taskTemplateObj))
         dispatch(setIsTemplateModalShown(false))
@@ -86,7 +84,8 @@ function NewTaskTemplateModal() {
             <Modal show={isShown}
                    onHide={handleClose}
                 // dialogClassName="add-price-modal-win"
-                   contentClassName="add-task-modal-content"
+                   contentClassName="add-task-template-modal-content"
+                   dialogClassName="add-task-template-modal-dialog"
                    centered>
                 <Modal.Dialog
                 >
@@ -95,8 +94,8 @@ function NewTaskTemplateModal() {
                     </Modal.Header>
                     <Modal.Body
                     >
-                        <Form onSubmit={handleFormSubmit}>
-                            <Form.Group>
+                        <Form onSubmit={handleFormSubmit} style={{height: "300px"}}>
+                            <Form.Group className="mt-3">
                                 <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
                                     <div style={{width: '100%'}}>
                                         {errors.taskTemplateValue ? (
@@ -127,7 +126,7 @@ function NewTaskTemplateModal() {
                                     </div>
                                 </div>
                             </Form.Group>
-                            <Form.Group>
+                            <Form.Group className="mt-3">
                                 <div style={{display: 'flex', justifyContent: 'space-between', width: '100%'}}>
                                     <div style={{width: '48%'}}>
                                         {errors.priorityValue ? (
@@ -155,7 +154,7 @@ function NewTaskTemplateModal() {
                                         />
                                     </div>
                                     <div style={{width: '48%'}}>
-                                        {errors.priorityValue ? (
+                                        {errors.complexityValue ? (
                                             <span className="text-danger">
                                                 Empty not allowed
                                             </span>
@@ -166,6 +165,9 @@ function NewTaskTemplateModal() {
                                         <Controller
                                             name="complexityValue"
                                             control={control}
+                                            rules={{
+                                                required: 'Empty not allowed', // Validation rule
+                                            }}
                                             render={({field}) => (
                                                 <Dropdown options={complexityOptions}
                                                           controlClassName="dropdown-custom-primary"
@@ -182,7 +184,7 @@ function NewTaskTemplateModal() {
                             </Form.Group>
                             <div className="spacer"/>
                             {/* Buttons container */}
-                            <div className="d-flex justify-content-end align-items-center mt-3">
+                            <div className="d-flex justify-content-end align-items-center mt-5">
                                 <Button type="button" className="btn btn-secondary general-btn">
                                     Cancel
                                 </Button>

@@ -117,7 +117,7 @@ function NewTaskModal() {
                                         />
                                     </div>
                                     <div style={{width: '48%'}}>
-                                        {errors.priorityValue ? (
+                                        {errors.complexityValue ? (
                                             <span className="text-danger">
                                                 Empty not allowed
                                             </span>

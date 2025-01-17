@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import {addNewTaskTemplate} from "./newTaskTemplateModalAction.js";
 import toast from "react-hot-toast";
 import {useSelector} from "react-redux";
+import {markTaskTemplateCompleted} from "../tasks/taskTemplateActions.js";
 
 
 const initialState = {
@@ -18,12 +19,12 @@ export const newTaskTemplateModalSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(addNewTaskTemplate.fulfilled, (state) => {
-                toast.success("Successfully added task!")
+            .addCase(markTaskTemplateCompleted.fulfilled, (state) => {
+                toast.success("Successfully processed template task!")
 
             })
-            .addCase(addNewTaskTemplate.rejected, (state) => {
-                toast.error("Failed to add task!")
+            .addCase(markTaskTemplateCompleted.rejected, (state) => {
+                toast.error("Failed to processed template task!")
 
             })
 

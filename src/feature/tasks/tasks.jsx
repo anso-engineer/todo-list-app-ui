@@ -37,7 +37,7 @@ export function Tasks() {
                             <div className="col-12 col-md-6 col-sm-6 mb-3" key={task.id}>
                                 <TaskCard id={task.id} name={task.name} description={task.description}
                                     creationDate={task.creation_date} priority={task.priority}
-                                    complexity={task.complexity} doneBtn={task.completed}
+                                    complexity={task.complexity} isTemplate={task.is_template} doneBtn={task.completed}
                                 />
 
                             </div>

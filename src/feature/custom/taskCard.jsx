@@ -3,10 +3,22 @@ import {Button} from "react-bootstrap";
 import {MdClose, MdDone} from "react-icons/md";
 import {useDispatch} from "react-redux";
 import {markTaskCompleted} from "../tasks/taskActions.js";
+import {markTaskTemplateCompleted} from "../tasks/taskTemplateActions.js";
 
 
-function TaskCard({id, name, creationDate, completed, priority, complexity, doneBtn}) {
+function TaskCard({id, name, creationDate, completed, priority, complexity,
+                      isTemplate, doneBtn}) {
     const dispatch = useDispatch();
+
+
+    function markCompleted() {
+        if (isTemplate === 1) {
+            dispatch(markTaskTemplateCompleted(id))
+        } else {
+            dispatch(markTaskCompleted(id))
+        }
+    }
+
     return (
         <div
             className={`m-3 card-task-outline position-relative ${
@@ -47,9 +59,7 @@ function TaskCard({id, name, creationDate, completed, priority, complexity, done
             <div className="d-flex flex-row-reverse">
                 <Button
                     className="justify-content-end bg-success"
-                    onClick={() => {
-                        dispatch(markTaskCompleted(id))
-                    }}
+                    onClick={markCompleted}
                     style={{
                         // backgroundColor: "#646cff",
                         width: "16px", // Adjust the width
