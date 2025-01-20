@@ -1,13 +1,18 @@
 import {Button, Form, Modal} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
-import {selectIsTemplateModalShown, setIsTemplateModalShown} from "./newTaskTemplateModalSlice.js";
+import {
+    dropState,
+    selectIsTemplateModalShown,
+    selectTaskTemplates,
+    setIsTemplateModalShown,
+} from "./newTaskTemplateModalSlice.js";
 import {Controller, useForm} from "react-hook-form";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import './dropdownStyle.css'
 import './newTaskTemplateModal.css'
-import {addNewTaskTemplate} from "./newTaskTemplateModalAction.js";
-import {useEffect} from "react";
+import {addNewTaskTemplate, getOpenedTaskTemplates} from "./newTaskTemplateModalAction.js";
+import {useEffect, useState} from "react";
 import Select from "react-select";
 import {handleDropdownChangeRhk, handleSelectChangeRhk} from "../../utils/handlers.js";
 import {complexityOptions, priorityOptions} from "../newTaskModal/newTaskModal.jsx";
@@ -16,22 +21,18 @@ import {complexityOptions, priorityOptions} from "../newTaskModal/newTaskModal.j
 function NewTaskTemplateModal() {
 
     const isShown = useSelector(selectIsTemplateModalShown)
+    const templates = useSelector(selectTaskTemplates)
     const dispatch = useDispatch();
-    // const [selectedPriorityOption, setSelectedPriorityOption] = useState(null);
-
+    const [templateOptions, setTemplateOptions] = useState([])
 // Template list
-    const templates = [
-        { id: 73, name: 'Помыть ванную и раковину', completed: 1 },
-        { id: 74, name: 'Помыть пол в кухне', completed: 1 },
-        { id: 75, name: 'Помыть пол в большой комнате', completed: 1 },
-    ];
+//     const templates = [
+//         { id: 73, name: 'Помыть ванную и раковину', completed: 1 },
+//         { id: 74, name: 'Помыть пол в кухне', completed: 1 },
+//         { id: 75, name: 'Помыть пол в большой комнате', completed: 1 },
+//     ];
+
 
 // Transform template list to options
-    const templateOptions = templates.map((template) => ({
-        value: template.id,
-        label: template.name,
-    }));
-
 
     const form = useForm({
         mode: "onTouched",
@@ -55,6 +56,21 @@ function NewTaskTemplateModal() {
         register("priorityValue")
     }, [register]);
 
+    useEffect(() => {
+        if (isShown) dispatch(getOpenedTaskTemplates());
+    }, [isShown]);
+
+
+    useEffect(() => {
+        if(templates.length > 0) {
+                setTemplateOptions (templates.map((template) => ({
+                value: template.id,
+                label: template.name,
+            }))
+                );
+        }
+    }, [templates] );
+
     // Custom submit handler
     const onSubmit = data => {
         // console.log('Form Data:', data);
@@ -75,7 +91,7 @@ function NewTaskTemplateModal() {
     );
 
     function handleClose() {
-        dispatch(setIsTemplateModalShown(false))
+        dispatch(dropState())
         console.log(errors)
     }
 
@@ -117,7 +133,7 @@ function NewTaskTemplateModal() {
                                                     onChange={(selectedOption) => {
                                                         handleSelectChangeRhk(templateOptions, field, 'taskTemplateValue', setValue, trigger)(selectedOption);
                                                     }}
-                                                    onMenuOpen={() => console.log('Menu opened')} // Optional: Define onMenuOpen explicitly if needed
+                                                    onMenuOpen={() => console.log(templateOptions)} // Optional: Define onMenuOpen explicitly if needed
                                                     value={watch('taskTemplateValue')}
                                                     placeholder="Select a template"
                                                 />

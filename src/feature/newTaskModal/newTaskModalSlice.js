@@ -23,7 +23,6 @@ export const newTaskModalSlice = createSlice({
             })
             .addCase(addNewTask.rejected, (state) => {
                 toast.error("Failed to add task!")
-
             })
 
     }

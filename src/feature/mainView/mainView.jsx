@@ -1,5 +1,4 @@
 import NewTaskModal from "../newTaskModal/newTaskModal.jsx";
-import TaskCard from "../custom/taskCard.jsx";
 import "../tasks/tasks.css"
 import {Button} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
@@ -16,7 +15,7 @@ function MainView() {
 
     const dispatch = useDispatch()
     const addNewTaskModalIsShown = useSelector(selectIsShown)
-    const addNewTaskTemplateModalIsShown = useSelector(selectIsTemplateModalShown)
+    const addNewTaskTemplateModalIsShown = useSelector(selectIsTemplateModalShown);
 
     return (
         <div>

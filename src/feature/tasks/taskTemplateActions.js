@@ -12,5 +12,4 @@ export const markTaskTemplateCompleted = createAsyncThunk(
         };
         const response = dispatch(addNewTaskTemplate(taskObj))
         return response
-
     })
