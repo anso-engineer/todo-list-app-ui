@@ -14,3 +14,8 @@ export const addNewTasksApi = async (taskObj) => {
     const response = await api.post(`/tasks`, taskObj)
     return response.data
 }
+
+export const editTaskApi = async (taskObj) => {
+    const response = await api.put(`/tasks/${taskObj.id}`, taskObj)
+    return response.data
+}

@@ -2,7 +2,7 @@ import NewTaskModal from "../newTaskModal/newTaskModal.jsx";
 import "../tasks/tasks.css"
 import {Button} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
-import {selectIsShown, setIsModalShown} from "../newTaskModal/newTaskModalSlice.js";
+import {selectIsShown, setActionType, setIsModalShown} from "../newTaskModal/newTaskModalSlice.js";
 import {Tasks} from "../tasks/tasks.jsx";
 import {Toaster} from "react-hot-toast";
 import NewTaskTemplateModal from "../newTaskTemplateModal/newTaskTemplateModal.jsx";
@@ -29,6 +29,7 @@ function MainView() {
                 onClick={() => {
                     if (!addNewTaskModalIsShown) {
                         dispatch(setIsModalShown(true))
+                        dispatch(setActionType("add"))
                     }
                 }
                 }>

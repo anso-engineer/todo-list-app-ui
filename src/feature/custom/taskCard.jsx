@@ -4,10 +4,13 @@ import {MdClose, MdDone} from "react-icons/md";
 import {useDispatch} from "react-redux";
 import {markTaskCompleted} from "../tasks/taskActions.js";
 import {markTaskTemplateCompleted} from "../tasks/taskTemplateActions.js";
+import {setActionType, setIsModalShown, setTaskToEdit} from "../newTaskModal/newTaskModalSlice.js";
+import {getFormattedDateTime} from "../../utils/datetime.js";
+import {useEffect} from "react";
 
 
 function TaskCard({id, name, creationDate, completed, priority, complexity,
-                      isTemplate, doneBtn}) {
+                      isTemplate, description, doneBtn}) {
     const dispatch = useDispatch();
 
 
@@ -19,8 +22,23 @@ function TaskCard({id, name, creationDate, completed, priority, complexity,
         }
     }
 
+    function modifyCard() {
+        dispatch(setIsModalShown(true))
+        dispatch(setTaskToEdit(
+            {
+                "id": id,
+                "complexityValue": complexity,
+                "priorityValue": priority,
+                "description": description,
+                "name": name
+            }
+        ))
+        dispatch(setActionType("edit"))
+    }
+
     return (
         <div
+            onDoubleClick={modifyCard}
             className={`m-3 card-task-outline position-relative ${
                 priority === "Low" || priority === null
                     ? "low-priority"

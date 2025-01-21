@@ -1,15 +1,19 @@
 import {Button, Form, Modal} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
-import {selectIsShown, setIsModalShown} from "./newTaskModalSlice.js";
+import {
+    dropState,
+    selectActionType,
+    selectIsShown,
+    selectTaskToEdit
+} from "./newTaskModalSlice.js";
 import {Controller, useForm} from "react-hook-form";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import './dropdownStyle.css'
 import './newTaskModal.css'
 import {handleDropdownChangeRhk} from "../../utils/handlers.js";
-import {addNewTask} from "./newTaskModalAction.js";
+import {addNewTask, editTask} from "./newTaskModalAction.js";
 import {useEffect} from "react";
-import {setShouldUpdateTasks} from "../tasks/taskSlice.js";
 
 export const priorityOptions = [
     {value: 'Low', label: 'Low'},
@@ -25,16 +29,23 @@ export const complexityOptions = [
 
 function NewTaskModal() {
 
+    const actionType = useSelector(selectActionType)
     const isShown = useSelector(selectIsShown)
     const dispatch = useDispatch();
+    const taskToEdit = useSelector(selectTaskToEdit)
     // const [selectedPriorityOption, setSelectedPriorityOption] = useState(null);
 
-
+    useEffect(() => {
+        if(taskToEdit) {
+            console.log(taskToEdit)
+            reset(taskToEdit)
+        }
+    }, [taskToEdit]);
 
 
     const form = useForm({
         mode: "onTouched",
-        defaultValues: {}
+        defaultValues: taskToEdit || {}, // Pre-fill values if editing
     });
 
     const {
@@ -54,13 +65,18 @@ function NewTaskModal() {
         register("priorityValue")
     }, [register]);
 
+
+
     // Custom submit handler
     const onSubmit = data => {
         console.log('Form Data:', data);
-        dispatch(addNewTask(data))
-        dispatch(setIsModalShown(false))
+        if (actionType === "add") {
+            dispatch(addNewTask(data));
+        } else if (actionType === "edit") {
+            dispatch(editTask(data)); // You would need to implement editTask action
+        }
+        dispatch(dropState())
         reset()
-        // Handle form data here (e.g., dispatch an action or make an API call)
     };
 
     // Prevent form submission by default and use handleSubmit for controlled submission
@@ -68,9 +84,18 @@ function NewTaskModal() {
         onSubmit
     );
 
+    const defaultValues = {
+        name: "",
+        priorityValue: "",
+        complexityValue: "",
+        description: "",
+    };
+
     function handleClose() {
-        dispatch(setIsModalShown(false))
-        console.log(errors)
+        dispatch(dropState())
+        Object.keys(defaultValues).forEach((key) => {
+            setValue(key, defaultValues[key]); // Reset each field to its specific default value
+        });
     }
 
 
@@ -188,9 +213,8 @@ function NewTaskModal() {
                                 <Button type="button" className="btn btn-secondary general-btn">
                                     Cancel
                                 </Button>
-                                <Button type="submit" className="btn btn-success general-btn"
-                                        style={{marginLeft: "12px"}}>
-                                    Submit
+                                <Button type="submit" className="btn btn-success general-btn" style={{marginLeft: "10px"}}>
+                                    {actionType === "add" ? "Add" : "Modify"}
                                 </Button>
                             </div>
                         </Form>

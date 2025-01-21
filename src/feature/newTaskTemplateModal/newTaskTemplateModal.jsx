@@ -36,7 +36,6 @@ function NewTaskTemplateModal() {
 
     const form = useForm({
         mode: "onTouched",
-        defaultValues: {}
     });
 
     const {

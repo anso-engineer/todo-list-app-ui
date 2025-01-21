@@ -1,12 +1,11 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {addNewTasksApi} from "../../api/tasksApi.js";
+import {addNewTasksApi, editTaskApi} from "../../api/tasksApi.js";
 import {getFormattedDateTime} from "../../utils/datetime.js";
 import {setShouldUpdateTasks} from "../tasks/taskSlice.js";
 
 export const addNewTask = createAsyncThunk(
     "addNewTask",
     async (taskObj, {dispatch}) => {
-
         const currentDate = new Date();
         const fullTaskObj = {
             "completed": 0,
@@ -22,6 +21,23 @@ export const addNewTask = createAsyncThunk(
         }
 
         const reponse = await addNewTasksApi(fullTaskObj)
+        dispatch(setShouldUpdateTasks(true))
+        return reponse
+    })
+
+
+export const editTask = createAsyncThunk(
+    "editTask",
+    async (taskObj, {dispatch}) => {
+        const fullTaskObj = {
+            "id": taskObj.id || null,
+            "complexity": taskObj.complexityValue?.value || taskObj.complexityValue,
+            "priority": taskObj.priorityValue?.value || taskObj.priorityValue,
+            "description": taskObj.description,
+            "name": taskObj.name
+        }
+
+        const reponse = await editTaskApi(fullTaskObj)
         dispatch(setShouldUpdateTasks(true))
         return reponse
 
