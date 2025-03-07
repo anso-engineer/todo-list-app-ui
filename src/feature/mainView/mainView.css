@@ -1,0 +1,8 @@
+.main-view {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ensures the parent container takes full height of the viewport */
+    padding: 5px;
+    gap: 20px;
+    justify-content: flex-start; /* Ensures items are pushed to the top */
+}
