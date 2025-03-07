@@ -6,6 +6,7 @@ import {selectIsShown, setActionType, setIsModalShown} from "../newTaskModal/new
 import {Tasks} from "../tasks/tasks.jsx";
 import {Toaster} from "react-hot-toast";
 import NewTaskTemplateModal from "../newTaskTemplateModal/newTaskTemplateModal.jsx";
+import "./mainView.css"
 import {
     selectIsTemplateModalShown,
     setIsTemplateModalShown
@@ -20,11 +21,17 @@ function MainView() {
     const currentFilterMode = useSelector(selectCurrentFilterMode); // Get selected filter mode
 
     const handleFilterChange = (mode) => {
-        dispatch(setCurrentFilterMode(mode));
+        if (currentFilterMode === mode) {
+            // If the button clicked is already active, clear the filter
+            dispatch(setCurrentFilterMode(""));  // Clear the filter by setting an empty string
+        } else {
+            // Otherwise, set the selected mode
+            dispatch(setCurrentFilterMode(mode));  // Update the current filter mode
+        }
     };
 
     return (
-        <div>
+        <div className="main-view">
             <Toaster
                 position="top-center"
                 reverseOrder={false}
