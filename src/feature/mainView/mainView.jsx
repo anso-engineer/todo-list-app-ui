@@ -10,12 +10,18 @@ import {
     selectIsTemplateModalShown,
     setIsTemplateModalShown
 } from "../newTaskTemplateModal/newTaskTemplateModalSlice.js";
+import {selectCurrentFilterMode, setCurrentFilterMode} from "../tasks/taskSlice.js";
 
 function MainView() {
 
     const dispatch = useDispatch()
     const addNewTaskModalIsShown = useSelector(selectIsShown)
     const addNewTaskTemplateModalIsShown = useSelector(selectIsTemplateModalShown);
+    const currentFilterMode = useSelector(selectCurrentFilterMode); // Get selected filter mode
+
+    const handleFilterChange = (mode) => {
+        dispatch(setCurrentFilterMode(mode));
+    };
 
     return (
         <div>
@@ -24,27 +30,49 @@ function MainView() {
                 reverseOrder={false}
                 gutter={8}
             />
-            <Button
-                className="toolbar-button"
-                onClick={() => {
-                    if (!addNewTaskModalIsShown) {
-                        dispatch(setIsModalShown(true))
-                        dispatch(setActionType("add"))
+            <div>
+                <Button
+                    className="toolbar-button"
+                    onClick={() => {
+                        if (!addNewTaskModalIsShown) {
+                            dispatch(setIsModalShown(true))
+                            dispatch(setActionType("add"))
+                        }
                     }
-                }
-                }>
-                New Task
-            </Button>
-            <Button
-                className="toolbar-button"
-                onClick={() => {
-                    if (!addNewTaskTemplateModalIsShown) {
-                        dispatch(setIsTemplateModalShown(true))
+                    }>
+                    New Task
+                </Button>
+                <Button
+                    className="toolbar-button"
+                    onClick={() => {
+                        if (!addNewTaskTemplateModalIsShown) {
+                            dispatch(setIsTemplateModalShown(true))
+                        }
                     }
-                }
-                }>
-                Template
-            </Button>
+                    }>
+                    Template
+                </Button>
+            </div>
+            <div>
+                <Button
+                    onClick={() => handleFilterChange("yesterday")}
+                    className={`${currentFilterMode === "yesterday" ? "filter-button-active" : "filter-button-regular"}`}
+                    >
+                    Yesterday
+                </Button>
+                <Button
+                    onClick={() => handleFilterChange("today")}
+                    className={`${currentFilterMode === "today" ? "filter-button-active" : "filter-button-regular"}`}
+                >
+                    Today
+                </Button>
+                <Button
+                    onClick={() => handleFilterChange("series")}
+                    className={`${currentFilterMode === "series" ? "filter-button-active" : "filter-button-regular"}`}
+                >
+                    Series
+                </Button>
+            </div>
             <div>
                 <NewTaskModal isShown/>
                 <NewTaskTemplateModal isShown/>

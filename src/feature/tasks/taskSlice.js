@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 
 const initialState = {
     tasks: [],
+    currentFilterMode: [],
     shouldUpdateTasks: false
 }
 
@@ -17,6 +18,9 @@ export const taskSlice = createSlice({
         },
         setShouldUpdateTasks(state, action) {
             state.shouldUpdateTasks = action.payload;
+        },
+        setCurrentFilterMode(state, action) {
+            state.currentFilterMode = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -37,8 +41,10 @@ export const taskSlice = createSlice({
 
 export const selectTasks = (state) => state.task.tasks
 export const selectShouldUpdateTasks = (state) => state.task.shouldUpdateTasks
+export const selectCurrentFilterMode = (state) => state.task.currentFilterMode;
 
-export const { setShouldUpdateTasks } = taskSlice.actions
+
+export const { setShouldUpdateTasks, setCurrentFilterMode } = taskSlice.actions
 
 
 export default taskSlice.reducer

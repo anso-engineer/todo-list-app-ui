@@ -5,12 +5,14 @@ import {useDispatch} from "react-redux";
 import {markTaskCompleted} from "../tasks/taskActions.js";
 import {markTaskTemplateCompleted} from "../tasks/taskTemplateActions.js";
 import {setActionType, setIsModalShown, setTaskToEdit} from "../newTaskModal/newTaskModalSlice.js";
-import {getFormattedDateTime} from "../../utils/datetime.js";
-import {useEffect} from "react";
+import 'react-tooltip/dist/react-tooltip.css'
+import {Tooltip} from "react-tooltip";
 
 
-function TaskCard({id, name, creationDate, completed, priority, complexity,
-                      isTemplate, description, doneBtn}) {
+function TaskCard({
+                      id, name, creationDate, completed, priority, complexity,
+                      isTemplate, description, doneBtn
+                  }) {
     const dispatch = useDispatch();
 
 
@@ -38,6 +40,7 @@ function TaskCard({id, name, creationDate, completed, priority, complexity,
 
     return (
         <div
+            data-tooltip-id={`tooltip-${id}`} // Link div to tooltip
             onDoubleClick={modifyCard}
             className={`m-3 card-task-outline position-relative ${
                 priority === "Low" || priority === null
@@ -71,7 +74,7 @@ function TaskCard({id, name, creationDate, completed, priority, complexity,
                     </Button>
                 </div>
             </div>
-            <div className="m-2 mt-3" style={{height:"70%"}}>
+            <div className="m-2 mt-3" style={{height: "70%"}}>
                 <h6 style={{textAlign: "justify"}}>{name}</h6>
             </div>
             <div className="d-flex flex-row-reverse">
@@ -88,9 +91,13 @@ function TaskCard({id, name, creationDate, completed, priority, complexity,
                         padding: "0", // Ensure no extra padding
                     }}
                 >
-                    <MdDone  size="1.5em"/>
+                    <MdDone size="1.5em"/>
                 </Button>
             </div>
+            {/* React Tooltip */}
+            <Tooltip id={`tooltip-${id}`} place="top" effect="solid">
+                {description || "No description available"}
+            </Tooltip>
         </div>
     )
 }
