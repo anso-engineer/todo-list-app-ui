@@ -118,6 +118,12 @@ function NewTaskTemplateModal() {
                                             render={({field}) => (
                                                 <Select
                                                     options={templateOptions}
+                                                    styles={{
+                                                        control: (baseStyles, state) => ({
+                                                            ...baseStyles,
+                                                            borderColor: state.isFocused ? '#007bff' : '#007bff',
+                                                        }),
+                                                    }}
                                                     {...field}
                                                     onChange={(selectedOption) => {
                                                         handleSelectChangeRhk(templateOptions, field, 'taskTemplateValue', setValue, trigger)(selectedOption);

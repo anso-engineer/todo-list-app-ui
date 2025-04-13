@@ -111,6 +111,7 @@ function TableManagement({
                 {isFilter && (
                     <InputGroup style={{ maxWidth: "300px" }}>
                         <Form.Control
+                            style={{borderColor: "#007bff", padding: "3px 12px 3px 12px"}}
                             placeholder="Filter..."
                             value={filterText}
                             onChange={(e) => setFilterText(e.target.value)}
