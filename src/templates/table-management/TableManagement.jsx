@@ -1,0 +1,143 @@
+import React, { useState } from "react";
+import DataTable from "react-data-table-component";
+import { Button, Form, InputGroup } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import "./talbeManagement.css";
+
+function TableManagement({
+                             tableObj,
+                             addHandler,
+                             editHandler,
+                             removeHandler,
+                             isFilter = false,
+                             filterFields = [],
+                             columnConfigs = [], // Custom column configs passed as props
+                         }) {
+    const [filterText, setFilterText] = useState("");
+
+    // Filter data based on filterFields and filterText
+    const filteredData = React.useMemo(() => {
+        if (!isFilter || !filterText) return [...tableObj];
+        return tableObj.filter((item) =>
+            filterFields.some((field) =>
+                item[field]?.toString().toLowerCase().includes(filterText.toLowerCase())
+            )
+        );
+    }, [tableObj, filterText, filterFields, isFilter]);
+
+    // Dynamically create columns based on tableObj keys and custom configurations
+    const baseColumns = Object.keys(tableObj[0]).map((key) => {
+        const columnConfig = columnConfigs.find((config) => config.name.toLowerCase() === key.toLowerCase());
+
+        // Default column configuration
+        const column = {
+            name: key.toUpperCase(),  // Column name (key)
+            selector: (row) => row[key],  // How to get the value for this column
+            sortable: true,  // Allow sorting
+            wrap: true,  // Wrap the text in the cell
+        };
+
+        // If custom configuration exists for this column, merge it
+        if (columnConfig) {
+            return {
+                ...column,
+                ...columnConfig,  // Apply custom properties like maxWidth, cell, etc.
+            };
+        }
+
+        return column;
+    });
+
+    // Action column if edit/delete available
+    const actionsColumn = {
+        name: "Actions",
+        cell: (row) => (
+            <div className="d-flex gap-2">
+                {editHandler && (
+                    <Button
+                        className="action-button"
+                        variant="outline-primary"
+                        size="sm"
+                        onClick={() => editHandler(row)}
+                    >
+                        <i className="bi bi-pencil"></i>
+                    </Button>
+                )}
+                {removeHandler && (
+                    <Button
+                        className="action-button"
+                        variant="danger"
+                        size="sm"
+                        onClick={() => removeHandler(row)}
+                    >
+                        <i className="bi bi-trash"></i>
+                    </Button>
+                )}
+            </div>
+        ),
+        ignoreRowClick: true,
+        allowOverflow: true,
+        button: true,
+    };
+
+    const columns = [...baseColumns];
+    if (editHandler || removeHandler) {
+        columns.push(actionsColumn);
+    }
+
+    // Dynamically create customStyles for width and growth
+    const customStyles = columns.reduce((acc, col, index) => {
+        acc.headCells = acc.headCells || {};
+        acc.cells = acc.cells || {};
+
+        // If column has a 'width' property, set both minWidth and maxWidth
+        if (col.width) {
+            acc.headCells.style = acc.headCells.style || {};
+            acc.cells.style = acc.cells.style || {};
+            acc.headCells.style.minWidth = col.width;
+            acc.headCells.style.maxWidth = col.width;
+            acc.cells.style.minWidth = col.width;
+            acc.cells.style.maxWidth = col.width;
+        }
+
+        return acc;
+    }, {});
+
+
+    return (
+        <div className="p-4 table-outline">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                {isFilter && (
+                    <InputGroup style={{ maxWidth: "300px" }}>
+                        <Form.Control
+                            placeholder="Filter..."
+                            value={filterText}
+                            onChange={(e) => setFilterText(e.target.value)}
+                        />
+                    </InputGroup>
+                )}
+
+                {addHandler && (
+                    <Button style={{ marginRight: "20px" }}
+                            className="action-button"
+                            size="sm"
+                            variant="success" onClick={addHandler}>
+                        <i className="bi bi-plus"></i>
+                    </Button>
+                )}
+            </div>
+
+            <DataTable
+                columns={columns}
+                data={filteredData}
+                pagination
+                highlightOnHover
+                dense
+                customStyles={customStyles}
+            />
+        </div>
+    );
+}
+
+export default TableManagement;
