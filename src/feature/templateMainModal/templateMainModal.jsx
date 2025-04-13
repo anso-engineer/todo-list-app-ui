@@ -8,26 +8,15 @@ import {Controller, useForm} from "react-hook-form";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import './templateMainModal.css'
-// import './dropdownStyle.css'
-// import './newTaskModal.css'
 import TableManagement from "../../templates/table-management/TableManagement.jsx";
 
-// export const priorityOptions = [
-//     {value: 'Low', label: 'Low'},
-//     {value: 'High', label: 'High'},
-// ]
 
-
-// export const complexityOptions = [
-//     {value: 'Easy', label: 'Easy'},
-//     {value: 'Moderate', label: 'Moderate'},
-//     {value: 'High', label: 'High'}
-// ]
 
 function TemplateMainModal() {
 
     const isShown = useSelector(selectIsShown)
     const dispatch = useDispatch();
+
 
     const users = [
         { id: 1, name: "Jose", role: "Admin" },
@@ -61,11 +50,11 @@ function TemplateMainModal() {
         <div>
             <Modal show={isShown}
                    onHide={handleClose}
-                // dialogClassName="add-price-modal-win"
+                   dialogClassName="template-main-modal-dialog"
                    contentClassName="template-main-modal-content"
+                   hea
                    centered>
-                <Modal.Dialog
-                >
+                {/*<Modal.Dialog>*/}
                     <Modal.Header closeButton>
                         <Modal.Title>Manage templates</Modal.Title>
                     </Modal.Header>
@@ -81,7 +70,7 @@ function TemplateMainModal() {
                             columnConfigs={columnConfigs} // Pass custom column configurations here
                         />
                     </Modal.Body>
-                </Modal.Dialog>
+                {/*</Modal.Dialog>*/}
             </Modal>
         </div>
     )
