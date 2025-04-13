@@ -3,7 +3,8 @@
     align-items: center; /* Vertically center */
     justify-content: center; /* Horizontally center */
     margin: 0 auto; /* Prevent jumping margins */
-    width: 100%;
+    /*width: 100%;*/
+    /*height: 100%;*/
     /*margin: 0px;*/
 }
 
@@ -11,6 +12,6 @@
 
 .add-task-template-modal-content {
     width: 380px;
-    height: 200px;
+    height: 350px;
 }
 

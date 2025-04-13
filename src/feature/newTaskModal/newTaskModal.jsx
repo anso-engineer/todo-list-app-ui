@@ -103,11 +103,10 @@ function NewTaskModal() {
         <div>
             <Modal show={isShown}
                    onHide={handleClose}
-                // dialogClassName="add-price-modal-win"
+                   dialogClassName="add-task-modal-dialog"
                    contentClassName="add-task-modal-content"
                    centered>
-                <Modal.Dialog
-                >
+                {/*<Modal.Dialog>*/}
                     <Modal.Header closeButton>
                         <Modal.Title>Plan your next task</Modal.Title>
                     </Modal.Header>
@@ -219,7 +218,7 @@ function NewTaskModal() {
                             </div>
                         </Form>
                     </Modal.Body>
-                </Modal.Dialog>
+                {/*</Modal.Dialog>*/}
             </Modal>
         </div>
     )
