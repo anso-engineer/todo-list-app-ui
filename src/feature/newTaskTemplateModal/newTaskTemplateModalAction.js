@@ -2,7 +2,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import {addNewTasksApi} from "../../api/tasksApi.js";
 import {getFormattedDateTime} from "../../utils/datetime.js";
 import {setShouldUpdateTasks} from "../tasks/taskSlice.js";
-import {addNewTaskTemplateApi, getOpenedTemplatesApi} from "../../api/taskTemplateApi.js";
+import {addNewTaskTemplateApi, getAllTemplatesApi, getOpenedTemplatesApi} from "../../api/taskTemplateApi.js";
 
 export const addNewTaskTemplate = createAsyncThunk(
     "addNewTaskTemplate",
