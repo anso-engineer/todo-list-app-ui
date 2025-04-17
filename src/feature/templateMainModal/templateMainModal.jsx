@@ -12,14 +12,19 @@ import TableManagement from "../../templates/table-management/TableManagement.js
 import {useEffect, useState} from "react";
 import {deleteTask, getAllTasks} from "../tasks/taskActions.js";
 import {getAllTemplates} from "./templateMainModalAction.js";
+import AddEditTemplateModal from "../addEditTemplateModal/AddEditTemplateModal.jsx";
+import {setIsShown} from "../addEditTemplateModal/AddEditTemplateModalSlice.js";
 
 
 function TemplateMainModal() {
 
     const isShown = useSelector(selectIsShown)
+    const isShownAddEditTemplate = useSelector(setIsShown)
     const dispatch = useDispatch();
     const templates = useSelector(selectAllTemplates)
     const [renderedTemplates, setRenderedTemplates] = useState([])
+    const [selectedRow, setSelectedRow] = useState(null);  // To manage the row that is double-clicked
+
 
     useEffect(() => {
         if (templates == []) return;
@@ -98,6 +103,11 @@ function TemplateMainModal() {
         dispatch(dropState())
     }
 
+    const handleRowDoubleClick = (row) => {
+        setSelectedRow(row); // Set the selected row for editing
+        dispatch(setIsShown(true)); // Show the AddEditTemplateModal
+    }
+
 
     return (
         <div>
@@ -125,16 +135,24 @@ function TemplateMainModal() {
                             isFilter={true}
                             filterFields={["name", "description"]}
                             columnConfigs={columnConfigs}
-                            doubleClickHandler = { (row) => {
-                                console.log("Double-clicked row: ", row);
-                            }
-                        }
+                            doubleClickHandler={handleRowDoubleClick}  // Update double-click handler
+
                         />
                     ) : (
                         <div>No templates available</div>
                     )}
                 </Modal.Body>
-                {/*</Modal.Dialog>*/}
+
+                {selectedRow && (
+                    <AddEditTemplateModal
+                        isShown={isShownAddEditTemplate}
+                        onClose={() => {
+                            dispatch(setIsShown(false));
+                            setSelectedRow(null); // Reset selected row after closing
+                        }}
+                        initialData={selectedRow}
+                    />
+                )}
             </Modal>
         </div>
     )

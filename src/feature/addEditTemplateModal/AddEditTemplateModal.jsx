@@ -5,6 +5,8 @@ import Select from 'react-select'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import {parseDate} from "../../utils/datetime.js";
+
 
 const cityOptions = [
     {value: 'kyiv', label: 'Kyiv'},
@@ -26,9 +28,12 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
             id: '',
             name: '',
             description: '',
-            isStudent: false,
-            city: null,
-            birthDate: null,
+            complexity: 'Low',
+            creationDate: null,
+            completionDate: null,
+            is_template: '',
+            priority: 'Low',
+            repeated: ''
         },
     })
 
@@ -39,11 +44,14 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                 id: initialData?.id || '',
                 name: initialData?.name || '',
                 description: initialData?.description || '',
-                isStudent: initialData?.isStudent || false,
-                city: initialData?.city
-                    ? cityOptions.find((opt) => opt.value === initialData.city)
-                    : null,
-                birthDate: initialData?.birthDate ? new Date(initialData.birthDate) : null,
+                complexity: initialData?.complexity || '',
+                // creationDate: initialData?.creation_date || '',
+                // completionDate: initialData?.completion_date || '',
+                creationDate: parseDate(initialData?.creation_date),
+                completionDate: parseDate(initialData?.completion_date),
+                is_template: initialData?.is_template || '',
+                priority: '',
+                repeated: ''
             })
         }
     }, [isShown]) // no reset inside deps, avoids infinite loop
@@ -53,8 +61,8 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
     const onSubmit = (data) => {
         const formatted = {
             ...data,
-            city: data.city?.value || null,
-            birthDate: data.birthDate?.toISOString() || null,
+            // city: data.city?.value || null,
+            // birthDate: data.birthDate?.toISOString() || null,
         }
         onSave(formatted)
         onClose()
@@ -101,60 +109,85 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                         )}
                     </div>
 
-                    {/* Checkbox */}
-                    <div className="form-check mb-3">
-                        <input
-                            type="checkbox"
-                            className="form-check-input"
-                            id="isStudent"
-                            {...register('isStudent')}
-                        />
-                        <label className="form-check-label" htmlFor="isStudent">
-                            Is Student
-                        </label>
-                    </div>
+                    {/*/!* Checkbox *!/*/}
+                    {/*<div className="form-check mb-3">*/}
+                    {/*    <input*/}
+                    {/*        type="checkbox"*/}
+                    {/*        className="form-check-input"*/}
+                    {/*        id="isStudent"*/}
+                    {/*        {...register('isStudent')}*/}
+                    {/*    />*/}
+                    {/*    <label className="form-check-label" htmlFor="isStudent">*/}
+                    {/*        Is Student*/}
+                    {/*    </label>*/}
+                    {/*</div>*/}
 
                     {/* Select with react-select */}
-                    <div className="mb-3">
-                        <label className="form-label">City</label>
-                        <Controller
-                            name="city"
-                            control={control}
-                            rules={{required: 'City is required'}}
-                            render={({field}) => (
-                                <Select
-                                    {...field}
-                                    options={cityOptions}
-                                    classNamePrefix="react-select"
-                                    styles={{
-                                        control: (baseStyles, state) => ({
-                                            ...baseStyles,
-                                            borderColor: state.isFocused ? '' : '#007bff',
-                                        }),
-                                    }}
+                    {/*<div className="mb-3">*/}
+                    {/*    <label className="form-label">City</label>*/}
+                    {/*    <Controller*/}
+                    {/*        name="city"*/}
+                    {/*        control={control}*/}
+                    {/*        rules={{required: 'City is required'}}*/}
+                    {/*        render={({field}) => (*/}
+                    {/*            <Select*/}
+                    {/*                {...field}*/}
+                    {/*                options={cityOptions}*/}
+                    {/*                classNamePrefix="react-select"*/}
+                    {/*                styles={{*/}
+                    {/*                    control: (baseStyles, state) => ({*/}
+                    {/*                        ...baseStyles,*/}
+                    {/*                        borderColor: state.isFocused ? '' : '#007bff',*/}
+                    {/*                    }),*/}
+                    {/*                }}*/}
 
-                                />
-                            )}
-                        />
-                        {errors.city && <div className="text-danger">{errors.city.message}</div>}
-                    </div>
+                    {/*            />*/}
+                    {/*        )}*/}
+                    {/*    />*/}
+                    {/*    {errors.city && <div className="text-danger">{errors.city.message}</div>}*/}
+                    {/*</div>*/}
 
                     {/* Date Picker */}
                     <div className="mb-3">
-                        <label className="form-label w-100">Birth Date</label>
+                        <label className="form-label w-100">Creation Date</label>
                         <Controller
-                            name="birthDate"
+                            name="creationDate"
                             control={control}
-                            rules={{required: 'Birth date is required'}}
+                            // rules={{required: 'Creation date is required'}}
                             render={({field}) => (
                                 <DatePicker
                                     selected={field.value}
                                     onChange={field.onChange}
+                                    showTimeSelect // Show time selection
+                                    timeFormat="HH:mm:ss" // Set time format to "HH:mm:ss"
+                                    timeIntervals={1} // Time intervals (1 minute)
+                                    dateFormat="dd.MM.yyyy HH:mm:ss" // Custom date and time format
+                                    placeholderText="Select a date and time"
                                     className="form-control border border-primary w-100"
-                                    dateFormat="dd.MM.yyyy"
-                                    placeholderText="Select date"
                                 />
 
+                            )}
+                        />
+                        {errors.birthDate && <div className="text-danger">{errors.birthDate.message}</div>}
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label w-100">Completion Date</label>
+                        <Controller
+                            name="completionDate"
+                            control={control}
+                            // rules={{required: 'Completion date is required'}}
+                            render={({field}) => (
+                                <DatePicker
+                                    selected={field.value}
+                                    onChange={field.onChange}
+                                    showTimeSelect // Show time selection
+                                    timeFormat="HH:mm:ss" // Set time format to "HH:mm:ss"
+                                    timeIntervals={1} // Time intervals (1 minute)
+                                    dateFormat="dd.MM.yyyy HH:mm:ss" // Custom date and time format
+                                    placeholderText="Select a date and time"
+                                    className="form-control border border-primary w-100"
+                                />
                             )}
                         />
                         {errors.birthDate && <div className="text-danger">{errors.birthDate.message}</div>}
@@ -170,9 +203,9 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                     </button>
                 </Modal.Footer>
 
-        </form>
-</Modal>
-)
+            </form>
+        </Modal>
+    )
 }
 
 export default AddEditTemplateModal

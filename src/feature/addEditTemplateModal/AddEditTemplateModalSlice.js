@@ -5,7 +5,7 @@ const initialState = {
 }
 
 export const addEditTemplateModalSlice = createSlice({
-    name: 'objectBidirectionalModal',
+    name: 'addEditTemplateModal',
     initialState,
     reducers: {
         setIsShown: (state, action) => {
@@ -19,7 +19,7 @@ export const addEditTemplateModalSlice = createSlice({
     },
 })
 
-export const selectIsShown = (state) => state.objectBidirectionalModal.isShown
+export const selectIsShown = (state) => state.addEditTemplateModal.isShown
 
 export const { setIsShown } = addEditTemplateModalSlice.actions
 

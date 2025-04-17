@@ -14,6 +14,7 @@ import {
 import {selectCurrentFilterMode, setCurrentFilterMode} from "../tasks/taskSlice.js";
 import {setIsTemplateMainModalShown} from "../templateMainModal/templateMainModalSlice.js";
 import TemplateMainModal from "../templateMainModal/templateMainModal.jsx";
+import AddEditTemplateModal from "../addEditTemplateModal/AddEditTemplateModal.jsx";
 
 function MainView() {
 
@@ -97,6 +98,7 @@ function MainView() {
                 <NewTaskModal isShown/>
                 <NewTaskTemplateModal isShown/>
                 <TemplateMainModal isShown/>
+                <AddEditTemplateModal/>
                 <Tasks/>
             </div>
 
