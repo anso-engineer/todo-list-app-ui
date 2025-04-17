@@ -8,10 +8,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {parseDate} from "../../utils/datetime.js";
 
 
-const cityOptions = [
-    {value: 'kyiv', label: 'Kyiv'},
-    {value: 'lviv', label: 'Lviv'},
-    {value: 'odesa', label: 'Odesa'},
+const complexityOptions = [
+    {value: 'Low', label: 'Low'},
+    {value: 'Moderate', label: 'Moderate'},
+    {value: 'High', label: 'High'},
+]
+
+const priorityOptions = [
+    {value: 'Low', label: 'Low'},
+    {value: 'High', label: 'High'},
 ]
 
 function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
@@ -28,11 +33,11 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
             id: '',
             name: '',
             description: '',
-            complexity: 'Low',
+            complexity: '',
+            priority: '',
             creationDate: null,
             completionDate: null,
             is_template: '',
-            priority: 'Low',
             repeated: ''
         },
     })
@@ -45,12 +50,10 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                 name: initialData?.name || '',
                 description: initialData?.description || '',
                 complexity: initialData?.complexity || '',
-                // creationDate: initialData?.creation_date || '',
-                // completionDate: initialData?.completion_date || '',
+                priority: initialData?.priority || '',
                 creationDate: parseDate(initialData?.creation_date),
                 completionDate: parseDate(initialData?.completion_date),
                 is_template: initialData?.is_template || '',
-                priority: '',
                 repeated: ''
             })
         }
@@ -123,29 +126,54 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                     {/*</div>*/}
 
                     {/* Select with react-select */}
-                    {/*<div className="mb-3">*/}
-                    {/*    <label className="form-label">City</label>*/}
-                    {/*    <Controller*/}
-                    {/*        name="city"*/}
-                    {/*        control={control}*/}
-                    {/*        rules={{required: 'City is required'}}*/}
-                    {/*        render={({field}) => (*/}
-                    {/*            <Select*/}
-                    {/*                {...field}*/}
-                    {/*                options={cityOptions}*/}
-                    {/*                classNamePrefix="react-select"*/}
-                    {/*                styles={{*/}
-                    {/*                    control: (baseStyles, state) => ({*/}
-                    {/*                        ...baseStyles,*/}
-                    {/*                        borderColor: state.isFocused ? '' : '#007bff',*/}
-                    {/*                    }),*/}
-                    {/*                }}*/}
+                    <div className="mb-3">
+                        <label className="form-label">Priority</label>
+                        <Controller
+                            name="priority"
+                            control={control}
+                            rules={{required: 'Priority is required'}}
+                            render={({field}) => (
+                                <Select
+                                    {...field}
+                                    value={priorityOptions.find(option => option.value === field.value)}
+                                    options={priorityOptions}
+                                    classNamePrefix="react-select"
+                                    styles={{
+                                        control: (baseStyles, state) => ({
+                                            ...baseStyles,
+                                            borderColor: state.isFocused ? '' : '#007bff',
+                                        }),
+                                    }}
+                                />
+                            )}
+                        />
+                        {errors.priority && <div className="text-danger">{errors.priority.message}</div>}
+                    </div>
 
-                    {/*            />*/}
-                    {/*        )}*/}
-                    {/*    />*/}
-                    {/*    {errors.city && <div className="text-danger">{errors.city.message}</div>}*/}
-                    {/*</div>*/}
+                    <div className="mb-3">
+                        <label className="form-label">Complexity</label>
+                        <Controller
+                            name="complexity"
+                            control={control}
+                            rules={{required: 'Complexity is required'}}
+                            render={({field}) => (
+                                <Select
+                                    {...field}
+                                    value={complexityOptions.find(option => option.value === field.value)} // ← Тут магія
+                                    options={complexityOptions}
+                                    classNamePrefix="react-select"
+                                    styles={{
+                                        control: (baseStyles, state) => ({
+                                            ...baseStyles,
+                                            borderColor: state.isFocused ? '' : '#007bff',
+                                        }),
+                                    }}
+                                />
+                            )}
+                        />
+                        {errors.complexity && <div className="text-danger">{errors.complexity.message}</div>}
+                    </div>
+
 
                     {/* Date Picker */}
                     <div className="mb-3">
