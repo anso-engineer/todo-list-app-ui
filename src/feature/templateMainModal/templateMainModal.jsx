@@ -18,8 +18,6 @@ function TemplateMainModal() {
 
     const isShown = useSelector(selectIsShown)
     const dispatch = useDispatch();
-
-    dispatch(getAllTemplates())
     const templates = useSelector(selectAllTemplates)
     const [renderedTemplates, setRenderedTemplates] = useState([])
 
@@ -52,6 +50,9 @@ function TemplateMainModal() {
         setRenderedTemplates(reorderedTasksObj);
     }, [templates]);
 
+    useEffect(() => {
+        dispatch(getAllTemplates())
+    }, []);
 
     // Define column configurations with at least 30px width for each column
     const columnConfigs = [
@@ -124,6 +125,10 @@ function TemplateMainModal() {
                             isFilter={true}
                             filterFields={["name", "description"]}
                             columnConfigs={columnConfigs}
+                            doubleClickHandler = { (row) => {
+                                console.log("Double-clicked row: ", row);
+                            }
+                        }
                         />
                     ) : (
                         <div>No templates available</div>

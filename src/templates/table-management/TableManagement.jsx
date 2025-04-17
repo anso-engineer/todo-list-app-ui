@@ -10,6 +10,7 @@ function TableManagement({
                              addHandler,
                              editHandler,
                              removeHandler,
+                             doubleClickHandler,  // New prop for handling double-click
                              isFilter = false,
                              filterFields = [],
                              columnConfigs = [], // Custom column configs passed as props
@@ -25,6 +26,12 @@ function TableManagement({
             )
         );
     }, [tableObj, filterText, filterFields, isFilter]);
+
+    const handleRowDoubleClick = (row) => {
+        if (doubleClickHandler) {
+            doubleClickHandler(row); // Call the handler passed from the parent component
+        }
+    };
 
     // Dynamically create columns based on tableObj keys and custom configurations
     const baseColumns = Object.keys(tableObj[0]).map((key) => {
@@ -111,7 +118,6 @@ function TableManagement({
                 {isFilter && (
                     <InputGroup style={{ maxWidth: "300px" }}>
                         <Form.Control
-                            style={{borderColor: "#007bff", padding: "3px 12px 3px 12px"}}
                             placeholder="Filter..."
                             value={filterText}
                             onChange={(e) => setFilterText(e.target.value)}
@@ -136,6 +142,7 @@ function TableManagement({
                 highlightOnHover
                 dense
                 customStyles={customStyles}
+                onRowDoubleClicked={doubleClickHandler} // ✅ only fires on double click
             />
         </div>
     );
