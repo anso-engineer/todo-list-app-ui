@@ -97,7 +97,7 @@ function MainView() {
             <div>
                 <NewTaskModal isShown/>
                 <NewTaskTemplateModal isShown/>
-                <TemplateMainModal isShown/>
+                <TemplateMainModal/>
                 <AddEditTemplateModal/>
                 <Tasks/>
             </div>

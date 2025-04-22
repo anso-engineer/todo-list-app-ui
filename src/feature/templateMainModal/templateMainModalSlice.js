@@ -8,7 +8,8 @@ const initialState = {
     isModalShown: false,
     taskToEdit: null,
     actionType: "add",
-    allTemplates: []
+    allTemplates: [],
+    shouldUpdateTemplates: false,
 }
 
 
@@ -18,6 +19,9 @@ export const templateMainModalSlice = createSlice({
     reducers: {
         setIsTemplateMainModalShown (state, action) {
             state.isModalShown = action.payload
+        },
+        setShouldUpdateTemplates(state, action) {
+            state.shouldUpdateTemplates = action.payload;
         },
         dropState (state) {
             state.isModalShown = false;
@@ -33,7 +37,7 @@ export const templateMainModalSlice = createSlice({
 
 
 
-export const {setIsTemplateMainModalShown ,
+export const {setIsTemplateMainModalShown , setShouldUpdateTemplates,
                 dropState} = templateMainModalSlice.actions
 
 export const selectIsShown = (state) => state.templateMainModal.isModalShown

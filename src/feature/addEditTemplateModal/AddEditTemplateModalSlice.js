@@ -20,6 +20,7 @@ export const addEditTemplateModalSlice = createSlice({
 })
 
 export const selectIsShown = (state) => state.addEditTemplateModal.isShown
+export const selectShouldUpdateTemplates = (state) => state.addEditTemplateModal.shouldUpdateTemplates
 
 export const { setIsShown } = addEditTemplateModalSlice.actions
 
