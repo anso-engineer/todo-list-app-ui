@@ -3,6 +3,7 @@ import {addNewTasksApi, editTaskApi} from "../../api/tasksApi.js";
 import {getFormattedDateTime} from "../../utils/datetime.js";
 import {setShouldUpdateTasks} from "../tasks/taskSlice.js";
 import {getAllTemplatesApi} from "../../api/taskTemplateApi.js";
+import {addTemplateApi, editTemplateApi} from "../../api/templateApi.js";
 
 export const getAllTemplates = createAsyncThunk(
     'getAllTaskTemplates',
@@ -16,3 +17,32 @@ export const getAllTemplates = createAsyncThunk(
         }
     }
 );
+
+
+export const saveTemplate = createAsyncThunk(
+    "template/save",
+    async (templateObj, { dispatch }) => {
+        const fullTaskObj = {
+            id: templateObj.id,
+            name: templateObj.name,
+            description: templateObj.description,
+            complexity: templateObj.complexity?.value || templateObj.complexity,
+            priority: templateObj.priority?.value || templateObj.priority,
+            completion_date: templateObj.completionDate?.toISOString?.() || templateObj.completionDate,
+            creation_date: templateObj.creationDate?.toISOString?.() || templateObj.creationDate,
+            postponed_status: templateObj.postponedStatus,
+            repeated: templateObj.repeated,
+            completed: templateObj.completed
+        }
+
+        let response
+        if (templateObj.id) {
+            response = await editTemplateApi(fullTaskObj)
+        } else {
+            response = await addTemplateApi(fullTaskObj)
+        }
+
+        dispatch(setShouldUpdateTasks(true))
+        return response
+    }
+)

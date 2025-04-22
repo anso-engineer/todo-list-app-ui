@@ -36,7 +36,7 @@ stop_process() {
 # Start the server
 start_server() {
     echo "Starting server on port $PORT..."
-    nohup npm run dev -- --host 0.0.0.0 --port $PORT > $LOG_FILE 2>&1 &
+    nohup npm run dev -- 0.0.0.0 --port $PORT > $LOG_FILE 2>&1 &
     echo "Server started with nohup. Logs are being written to $LOG_FILE."
 }
 

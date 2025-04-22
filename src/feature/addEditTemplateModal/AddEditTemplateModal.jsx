@@ -5,7 +5,7 @@ import Select from 'react-select'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {parseDate} from "../../utils/datetime.js";
+import {getFormattedDateTime, parseDate} from "../../utils/datetime.js";
 
 
 const complexityOptions = [
@@ -49,24 +49,34 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                 id: initialData?.id || '',
                 name: initialData?.name || '',
                 description: initialData?.description || '',
-                complexity: initialData?.complexity || '',
-                priority: initialData?.priority || '',
-                creationDate: parseDate(initialData?.creation_date),
-                completionDate: parseDate(initialData?.completion_date),
+                complexity: complexityOptions.find(opt =>
+                    opt.value === (initialData?.complexity?.value || initialData?.complexity)
+                ) || '',
+                priority: priorityOptions.find(opt =>
+                    opt.value === (initialData?.priority?.value || initialData?.priority)
+                ) || '',
+                creationDate: parseDate(initialData?.creation_date) || null,
+                completionDate: parseDate(initialData?.completion_date) || null,
                 is_template: initialData?.is_template || '',
-                repeated: ''
+                repeated: initialData?.repeated ?? ''
             })
         }
-    }, [isShown]) // no reset inside deps, avoids infinite loop
+    }, [isShown])
+
+
 
 
     //todo - 3: define to be sent
     const onSubmit = (data) => {
-        const formatted = {
-            ...data,
-            // city: data.city?.value || null,
-            // birthDate: data.birthDate?.toISOString() || null,
-        }
+    const formatted = {
+        ...data,
+        complexity: data.complexity?.value || null,
+        priority: data.priority?.value || null,
+        description: data.description || null,
+        repeated: data.repeated ? parseInt(data.repeated) : 0,
+        creation_date: data.creationDate ? getFormattedDateTime(data.creationDate, "D.M.YYYY HH:mm:ss") : null,
+        completion_date: data.completionDate ? getFormattedDateTime(data.completionDate, "D.M.YYYY HH:mm:ss") : null,
+    }
         onSave(formatted)
         onClose()
     }
@@ -104,7 +114,7 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                     <div className="mb-3">
                         <label className="form-label">Description</label>
                         <input
-                            {...register('description', {required: 'Description is required'})}
+                            {...register('description')}
                             className={`form-control border border-primary ${errors.description ? 'is-invalid' : ''}`}
                         />
                         {errors.description && (
@@ -131,13 +141,15 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                         <Controller
                             name="priority"
                             control={control}
-                            rules={{required: 'Priority is required'}}
-                            render={({field}) => (
+                            rules={{
+                                required: 'Priority cannot be empty', // Validation rule
+                            }}
+                            render={({ field }) => (
                                 <Select
                                     {...field}
-                                    value={priorityOptions.find(option => option.value === field.value)}
                                     options={priorityOptions}
                                     classNamePrefix="react-select"
+                                    placeholder="Select priority"
                                     styles={{
                                         control: (baseStyles, state) => ({
                                             ...baseStyles,
@@ -155,13 +167,15 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                         <Controller
                             name="complexity"
                             control={control}
-                            rules={{required: 'Complexity is required'}}
-                            render={({field}) => (
+                            rules={{
+                                required: 'Complexity cannot be empty', // Validation rule
+                            }}
+                            render={({ field }) => (
                                 <Select
                                     {...field}
-                                    value={complexityOptions.find(option => option.value === field.value)} // ← Тут магія
                                     options={complexityOptions}
                                     classNamePrefix="react-select"
+                                    placeholder="Select complexity"
                                     styles={{
                                         control: (baseStyles, state) => ({
                                             ...baseStyles,

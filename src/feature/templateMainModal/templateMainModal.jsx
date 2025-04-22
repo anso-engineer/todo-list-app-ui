@@ -11,7 +11,7 @@ import './templateMainModal.css'
 import TableManagement from "../../templates/table-management/TableManagement.jsx";
 import {useEffect, useState} from "react";
 import {deleteTask, getAllTasks} from "../tasks/taskActions.js";
-import {getAllTemplates} from "./templateMainModalAction.js";
+import {getAllTemplates, saveTemplate} from "./templateMainModalAction.js";
 import AddEditTemplateModal from "../addEditTemplateModal/AddEditTemplateModal.jsx";
 import {setIsShown} from "../addEditTemplateModal/AddEditTemplateModalSlice.js";
 
@@ -109,6 +109,11 @@ function TemplateMainModal() {
     }
 
 
+    const handleAddNewItem = () => {
+        dispatch(setIsShown(true)); // Show the AddEditTemplateModal
+    }
+
+
     return (
         <div>
             <Modal show={isShown}
@@ -126,7 +131,7 @@ function TemplateMainModal() {
                     {renderedTemplates.length > 0 ? (
                         <TableManagement
                             tableObj={renderedTemplates}
-                            addHandler={() => console.log("Add")}
+                            addHandler={handleAddNewItem}
                             editHandler={(item) => console.log("Edit", item)}
                             removeHandler={(item) => {
                                 dispatch(deleteTask(item))
@@ -149,6 +154,9 @@ function TemplateMainModal() {
                         onClose={() => {
                             dispatch(setIsShown(false));
                             setSelectedRow(null); // Reset selected row after closing
+                        }}
+                        onSave={(templateObj) => {
+                            dispatch(saveTemplate(templateObj))
                         }}
                         initialData={selectedRow}
                     />
