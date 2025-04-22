@@ -2,7 +2,7 @@ import {Button, Form, Modal} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {
     dropState, selectAllTemplates,
-    selectIsShown,
+    selectIsShown, selectShouldUpdateTemplates, setShouldUpdateTemplates,
 } from "./templateMainModalSlice.js";
 import {Controller, useForm} from "react-hook-form";
 import Dropdown from 'react-dropdown';
@@ -13,18 +13,30 @@ import {useEffect, useState} from "react";
 import {deleteTask, getAllTasks} from "../tasks/taskActions.js";
 import {getAllTemplates, saveTemplate} from "./templateMainModalAction.js";
 import AddEditTemplateModal from "../addEditTemplateModal/AddEditTemplateModal.jsx";
-import {setIsShown} from "../addEditTemplateModal/AddEditTemplateModalSlice.js";
+import {
+    selectIsShowAddEditTemplate,
+    setIsShownAddEditTemplateShown
+} from "../addEditTemplateModal/AddEditTemplateModalSlice.js";
 
 
 function TemplateMainModal() {
 
     const isShown = useSelector(selectIsShown)
-    const isShownAddEditTemplate = useSelector(setIsShown)
+    const isShownAddEditTemplate = useSelector(selectIsShowAddEditTemplate)
     const dispatch = useDispatch();
     const templates = useSelector(selectAllTemplates)
+    const shouldUpdateTemplates = useSelector(selectShouldUpdateTemplates)
     const [renderedTemplates, setRenderedTemplates] = useState([])
     const [selectedRow, setSelectedRow] = useState(null);  // To manage the row that is double-clicked
 
+    useEffect(() => {
+        if (shouldUpdateTemplates) {
+            dispatch(getAllTemplates())
+            console.log("Templates updated!")
+            dispatch(setShouldUpdateTemplates(false))
+        }
+
+    }, [shouldUpdateTemplates]);
 
     useEffect(() => {
         if (templates == []) return;
@@ -105,12 +117,13 @@ function TemplateMainModal() {
 
     const handleRowDoubleClick = (row) => {
         setSelectedRow(row); // Set the selected row for editing
-        dispatch(setIsShown(true)); // Show the AddEditTemplateModal
+        console.log(isShownAddEditTemplate)
+        dispatch(setIsShownAddEditTemplateShown(true)); // Show the AddEditTemplateModal
     }
 
 
     const handleAddNewItem = () => {
-        dispatch(setIsShown(true)); // Show the AddEditTemplateModal
+        // dispatch(setIsShown(true)); // Show the AddEditTemplateModal
     }
 
 
@@ -152,7 +165,7 @@ function TemplateMainModal() {
                     <AddEditTemplateModal
                         isShown={isShownAddEditTemplate}
                         onClose={() => {
-                            dispatch(setIsShown(false));
+                            dispatch(setIsShownAddEditTemplateShown(false));
                             setSelectedRow(null); // Reset selected row after closing
                         }}
                         onSave={(templateObj) => {

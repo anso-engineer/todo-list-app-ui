@@ -1,27 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
+import {saveTemplate} from "../templateMainModal/templateMainModalAction.js";
 
 const initialState = {
-    isShown: false,
+    isShownAddEditTemplate: false,
 }
 
 export const addEditTemplateModalSlice = createSlice({
     name: 'addEditTemplateModal',
     initialState,
     reducers: {
-        setIsShown: (state, action) => {
-            state.isShown = action.payload
+        setIsShownAddEditTemplateShown: (state, action) => {
+            state.isShownAddEditTemplate = action.payload
         },
     },
     extraReducers: (builder) => {
-        // builder.addCase(fetchUserById.fulfilled, (state, action) => {
-        //              TBD
-        // })
+        builder.addCase(saveTemplate.fulfilled, (state, action) => {
+            state.shouldUpdateTemplates = true
+        })
     },
 })
 
-export const selectIsShown = (state) => state.addEditTemplateModal.isShown
-export const selectShouldUpdateTemplates = (state) => state.addEditTemplateModal.shouldUpdateTemplates
+export const selectIsShowAddEditTemplate = (state) => state.addEditTemplateModal.isShownAddEditTemplate
 
-export const { setIsShown } = addEditTemplateModalSlice.actions
+
+export const { setIsShownAddEditTemplateShown } = addEditTemplateModalSlice.actions
 
 export default addEditTemplateModalSlice.reducer

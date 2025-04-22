@@ -42,5 +42,6 @@ export const {setIsTemplateMainModalShown , setShouldUpdateTemplates,
 
 export const selectIsShown = (state) => state.templateMainModal.isModalShown
 export const selectAllTemplates = (state) => state.templateMainModal.allTemplates
+export const selectShouldUpdateTemplates = (state) => state.templateMainModal.shouldUpdateTemplates
 
 export default templateMainModalSlice.reducer
