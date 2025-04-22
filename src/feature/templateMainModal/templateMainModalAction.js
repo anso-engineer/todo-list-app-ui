@@ -1,6 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {getAllTemplatesApi} from "../../api/taskTemplateApi.js";
 import {addTemplateApi, editTemplateApi} from "../../api/templateApi.js";
+import {setShouldUpdateTemplates} from "./templateMainModalSlice.js";
 
 
 export const getAllTemplates = createAsyncThunk(
@@ -40,6 +41,7 @@ export const saveTemplate = createAsyncThunk(
             response = await addTemplateApi(fullTaskObj)
         }
 
+        dispatch(setShouldUpdateTemplates(true))
         return response
     }
 )

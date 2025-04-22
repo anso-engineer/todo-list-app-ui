@@ -9,13 +9,14 @@ export const addEditTemplateModalSlice = createSlice({
     name: 'addEditTemplateModal',
     initialState,
     reducers: {
-        setIsShownAddEditTemplateShown: (state, action) => {
+        setIsShownAddEditTemplate: (state, action) => {
             state.isShownAddEditTemplate = action.payload
         },
     },
     extraReducers: (builder) => {
         builder.addCase(saveTemplate.fulfilled, (state, action) => {
-            state.shouldUpdateTemplates = true
+            //access a taskTemplate shouldUpdateTemplates
+            //impossible to call from there
         })
     },
 })
@@ -23,6 +24,6 @@ export const addEditTemplateModalSlice = createSlice({
 export const selectIsShowAddEditTemplate = (state) => state.addEditTemplateModal.isShownAddEditTemplate
 
 
-export const { setIsShownAddEditTemplateShown } = addEditTemplateModalSlice.actions
+export const { setIsShownAddEditTemplate } = addEditTemplateModalSlice.actions
 
 export default addEditTemplateModalSlice.reducer

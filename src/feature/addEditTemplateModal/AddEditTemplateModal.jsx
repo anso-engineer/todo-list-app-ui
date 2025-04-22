@@ -61,7 +61,7 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                 repeated: initialData?.repeated ?? ''
             })
         }
-    }, [isShown])
+    }, [isShown, initialData])
 
 
 

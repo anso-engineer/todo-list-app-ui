@@ -1,22 +1,17 @@
-import {Button, Form, Modal} from "react-bootstrap";
+import {  Modal} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {
     dropState, selectAllTemplates,
     selectIsShown, selectShouldUpdateTemplates, setShouldUpdateTemplates,
 } from "./templateMainModalSlice.js";
-import {Controller, useForm} from "react-hook-form";
-import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import './templateMainModal.css'
 import TableManagement from "../../templates/table-management/TableManagement.jsx";
 import {useEffect, useState} from "react";
-import {deleteTask, getAllTasks} from "../tasks/taskActions.js";
+import {deleteTask} from "../tasks/taskActions.js";
 import {getAllTemplates, saveTemplate} from "./templateMainModalAction.js";
 import AddEditTemplateModal from "../addEditTemplateModal/AddEditTemplateModal.jsx";
-import {
-    selectIsShowAddEditTemplate,
-    setIsShownAddEditTemplateShown
-} from "../addEditTemplateModal/AddEditTemplateModalSlice.js";
+import {selectIsShowAddEditTemplate, setIsShownAddEditTemplate} from "../addEditTemplateModal/AddEditTemplateModalSlice.js";
 
 
 function TemplateMainModal() {
@@ -37,6 +32,7 @@ function TemplateMainModal() {
         }
 
     }, [shouldUpdateTemplates]);
+
 
     useEffect(() => {
         if (templates == []) return;
@@ -118,14 +114,21 @@ function TemplateMainModal() {
     const handleRowDoubleClick = (row) => {
         setSelectedRow(row); // Set the selected row for editing
         console.log(isShownAddEditTemplate)
-        dispatch(setIsShownAddEditTemplateShown(true)); // Show the AddEditTemplateModal
+        dispatch(setIsShownAddEditTemplate(true));
     }
 
 
     const handleAddNewItem = () => {
-        // dispatch(setIsShown(true)); // Show the AddEditTemplateModal
+        setSelectedRow(null); // Set the selected row for editing
+        dispatch(setIsShownAddEditTemplate(true))
+        console.log(isShownAddEditTemplate)
     }
 
+    useEffect(() => {
+        if (isShownAddEditTemplate) {
+            console.log("Add/Edit Template modal is now visible");
+        }
+    }, [isShownAddEditTemplate]);
 
     return (
         <div>
@@ -144,7 +147,9 @@ function TemplateMainModal() {
                     {renderedTemplates.length > 0 ? (
                         <TableManagement
                             tableObj={renderedTemplates}
-                            addHandler={handleAddNewItem}
+                            addHandler={() =>
+                                handleAddNewItem()
+                        }
                             editHandler={(item) => console.log("Edit", item)}
                             removeHandler={(item) => {
                                 dispatch(deleteTask(item))
@@ -165,7 +170,7 @@ function TemplateMainModal() {
                     <AddEditTemplateModal
                         isShown={isShownAddEditTemplate}
                         onClose={() => {
-                            dispatch(setIsShownAddEditTemplateShown(false));
+                            dispatch(setIsShownAddEditTemplate(false));
                             setSelectedRow(null); // Reset selected row after closing
                         }}
                         onSave={(templateObj) => {
