@@ -27,11 +27,12 @@ export const saveTemplate = createAsyncThunk(
             description: templateObj.description,
             complexity: templateObj.complexity?.value || templateObj.complexity,
             priority: templateObj.priority?.value || templateObj.priority,
+            postponed_status: templateObj.postponed_status,
             completion_date: templateObj.completionDate?.toISOString?.() || templateObj.completionDate,
             creation_date: templateObj.creationDate?.toISOString?.() || templateObj.creationDate,
-            postponed_status: templateObj.postponedStatus,
             repeated: templateObj.repeated,
-            completed: templateObj.completed
+            completed: templateObj.completed,
+            is_template: templateObj.is_template
         }
 
         let response

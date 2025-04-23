@@ -43,6 +43,7 @@ function TemplateMainModal() {
                                                      is_template,
                                                      creation_date,
                                                      completion_date,
+                                                     postponed_status,
                                                      complexity,
                                                      priority,
                                                      description,
@@ -56,6 +57,7 @@ function TemplateMainModal() {
             priority,
             creation_date,
             completion_date,
+            postponed_status,
             repeated
         }));
 
@@ -166,7 +168,8 @@ function TemplateMainModal() {
                     )}
                 </Modal.Body>
 
-                {selectedRow && (
+                {/*{selectedRow && */}
+                    (
                     <AddEditTemplateModal
                         isShown={isShownAddEditTemplate}
                         onClose={() => {
@@ -178,7 +181,8 @@ function TemplateMainModal() {
                         }}
                         initialData={selectedRow}
                     />
-                )}
+                )
+            {/*}*/}
             </Modal>
         </div>
     )

@@ -2,7 +2,7 @@ import {api} from "./api.js";
 
 
 export const addTemplateApi = async (templateObj) => {
-    const response = await api.post(`/tasks/${templateObj.id}`, templateObj)
+    const response = await api.post(`/tasks`, templateObj)
     return response.data
 }
 

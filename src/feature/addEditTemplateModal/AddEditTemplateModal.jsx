@@ -19,6 +19,13 @@ const priorityOptions = [
     {value: 'High', label: 'High'},
 ]
 
+
+const postponedOptions = [
+    {value: "0", label: 'False'},
+    {value: "1", label: 'True'},
+]
+
+
 function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
     const {
         register,
@@ -38,7 +45,8 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
             creationDate: null,
             completionDate: null,
             is_template: '',
-            repeated: ''
+            postponed_status: 0,
+            repeated: '0'
         },
     })
 
@@ -58,6 +66,8 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                 creationDate: parseDate(initialData?.creation_date) || null,
                 completionDate: parseDate(initialData?.completion_date) || null,
                 is_template: initialData?.is_template || '',
+                postponed_status: postponedOptions.find(opt =>
+                    opt.value == initialData?.postponed_status) || '',
                 repeated: initialData?.repeated ?? ''
             })
         }
@@ -72,10 +82,13 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
         ...data,
         complexity: data.complexity?.value || null,
         priority: data.priority?.value || null,
+        postponed_status: data.postponed_status?.value || null,
         description: data.description || null,
         repeated: data.repeated ? parseInt(data.repeated) : 0,
         creation_date: data.creationDate ? getFormattedDateTime(data.creationDate, "D.M.YYYY HH:mm:ss") : null,
         completion_date: data.completionDate ? getFormattedDateTime(data.completionDate, "D.M.YYYY HH:mm:ss") : null,
+        completed: data.completed?.value || null,
+        is_template: '1'
     }
         onSave(formatted)
         onClose()
@@ -144,7 +157,7 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                             rules={{
                                 required: 'Priority cannot be empty', // Validation rule
                             }}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <Select
                                     {...field}
                                     options={priorityOptions}
@@ -170,7 +183,7 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                             rules={{
                                 required: 'Complexity cannot be empty', // Validation rule
                             }}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <Select
                                     {...field}
                                     options={complexityOptions}
@@ -234,6 +247,38 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                         />
                         {errors.birthDate && <div className="text-danger">{errors.birthDate.message}</div>}
                     </div>
+
+
+                    <div className="mb-3">
+                        <label className="form-label">Repeated</label>
+                        <input
+                            {...register('repeated')}
+                            className="form-control border border-primary"
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label">Postponed</label>
+                        <Controller
+                            name="postponed_status"
+                            control={control}
+                            render={({field}) => (
+                                <Select
+                                    {...field}
+                                    options={postponedOptions}
+                                    classNamePrefix="react-select"
+                                    placeholder="Select complexity"
+                                    styles={{
+                                        control: (baseStyles, state) => ({
+                                            ...baseStyles,
+                                            borderColor: state.isFocused ? '' : '#007bff',
+                                        }),
+                                    }}
+                                />
+                            )}
+                        />
+                    </div>
+
                 </Modal.Body>
 
                 <Modal.Footer>
