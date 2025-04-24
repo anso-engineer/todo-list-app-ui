@@ -14,6 +14,7 @@ function TableManagement({
                              isFilter = false,
                              filterFields = [],
                              columnConfigs = [], // Custom column configs passed as props
+                             excludedFields = [], // <<< new
                          }) {
     const [filterText, setFilterText] = useState("");
 
@@ -33,28 +34,21 @@ function TableManagement({
         }
     };
 
-    // Dynamically create columns based on tableObj keys and custom configurations
-    const baseColumns = Object.keys(tableObj[0]).map((key) => {
-        const columnConfig = columnConfigs.find((config) => config.name.toLowerCase() === key.toLowerCase());
+    const baseColumns = Object.keys(tableObj[0])
+        .filter((key) => !excludedFields.includes(key)) // <<< exclude specified fields
+        .map((key) => {
+            const columnConfig = columnConfigs.find(
+                (config) => config.name.toLowerCase() === key.toLowerCase()
+            );
 
-        // Default column configuration
-        const column = {
-            name: key.toUpperCase(),  // Column name (key)
-            selector: (row) => row[key],  // How to get the value for this column
-            sortable: true,  // Allow sorting
-            wrap: true,  // Wrap the text in the cell
-        };
-
-        // If custom configuration exists for this column, merge it
-        if (columnConfig) {
             return {
-                ...column,
-                ...columnConfig,  // Apply custom properties like maxWidth, cell, etc.
+                name: key.toUpperCase(),
+                selector: row => row[key],
+                sortable: true,
+                wrap: true,
+                width: columnConfig?.width || 'auto',
             };
-        }
-
-        return column;
-    });
+        });
 
     // Action column if edit/delete available
     const actionsColumn = {
@@ -142,7 +136,7 @@ function TableManagement({
                 highlightOnHover
                 dense
                 customStyles={customStyles}
-                onRowDoubleClicked={doubleClickHandler} // ✅ only fires on double click
+                onRowDoubleClicked={doubleClickHandler}
             />
         </div>
     );

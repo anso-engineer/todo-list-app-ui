@@ -77,11 +77,11 @@ function TemplateMainModal() {
         },
         {
             name: 'name',
-            width: '100px', // Single width for name column
+            width: '120px', // Single width for name column
         },
         {
             name: 'description',
-            width: '150px', // Single width for role column
+            width: '250px', // Single width for role column
         },
         {
             name: 'is_template',
@@ -105,7 +105,7 @@ function TemplateMainModal() {
         },
         {
             name: 'repeated',
-            width: '120px', // Single width for role column
+            width: '110px', // Single width for role column
         }
     ];
 
@@ -161,6 +161,7 @@ function TemplateMainModal() {
                             filterFields={["name", "description"]}
                             columnConfigs={columnConfigs}
                             doubleClickHandler={handleRowDoubleClick}  // Update double-click handler
+                            excludedFields={["is_template", "postponed_status"]}
 
                         />
                     ) : (
