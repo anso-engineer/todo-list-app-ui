@@ -1,0 +1,25 @@
+.template-main-modal-content {
+    display: flex;
+    align-items: center; /* Vertically center */
+    justify-content: center; /* Horizontally center */
+    margin: 0 auto; /* Prevent jumping margins */
+    width: 100%;
+}
+
+
+
+.template-main-modal-dialog {
+    min-width: 1200px;
+    flex-grow: 1;
+}
+
+.template-main-modal-content .modal-header {
+    width: 100%;
+    padding: 1rem;
+    background-color: #f8f9fa; /* Optional: light background */
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+

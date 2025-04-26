@@ -12,12 +12,16 @@ import {
     setIsTemplateModalShown
 } from "../newTaskTemplateModal/newTaskTemplateModalSlice.js";
 import {selectCurrentFilterMode, setCurrentFilterMode} from "../tasks/taskSlice.js";
+import {setIsTemplateMainModalShown} from "../templateMainModal/templateMainModalSlice.js";
+import TemplateMainModal from "../templateMainModal/templateMainModal.jsx";
+import AddEditTemplateModal from "../addEditTemplateModal/AddEditTemplateModal.jsx";
 
 function MainView() {
 
     const dispatch = useDispatch()
     const addNewTaskModalIsShown = useSelector(selectIsShown)
     const addNewTaskTemplateModalIsShown = useSelector(selectIsTemplateModalShown);
+    const templateModalIsShown = useSelector(selectIsTemplateModalShown)
     const currentFilterMode = useSelector(selectCurrentFilterMode); // Get selected filter mode
 
     const handleFilterChange = (mode) => {
@@ -57,7 +61,17 @@ function MainView() {
                         }
                     }
                     }>
-                    Template
+                    Predefined
+                </Button>
+                <Button
+                    className="toolbar-button"
+                    onClick={() => {
+                        if (!templateModalIsShown) {
+                            dispatch(setIsTemplateMainModalShown(true))
+                        }
+                    }
+                    }>
+                    Templates
                 </Button>
             </div>
             <div>
@@ -83,6 +97,8 @@ function MainView() {
             <div>
                 <NewTaskModal isShown/>
                 <NewTaskTemplateModal isShown/>
+                <TemplateMainModal/>
+                <AddEditTemplateModal/>
                 <Tasks/>
             </div>
 

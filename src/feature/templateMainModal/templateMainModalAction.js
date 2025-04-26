@@ -1,0 +1,48 @@
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {getAllTemplatesApi} from "../../api/taskTemplateApi.js";
+import {addTemplateApi, editTemplateApi} from "../../api/templateApi.js";
+import {setShouldUpdateTemplates} from "./templateMainModalSlice.js";
+
+
+export const getAllTemplates = createAsyncThunk(
+    'getAllTaskTemplates',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await getAllTemplatesApi();
+            return response;
+        } catch (error) {
+            // Use rejectWithValue for handling errors properly
+            return rejectWithValue(error.response?.data || 'Failed to fetch templates');
+        }
+    }
+);
+
+
+export const saveTemplate = createAsyncThunk(
+    "template/save",
+    async (templateObj, { dispatch }) => {
+        const fullTaskObj = {
+            id: templateObj.id,
+            name: templateObj.name,
+            description: templateObj.description,
+            complexity: templateObj.complexity?.value || templateObj.complexity,
+            priority: templateObj.priority?.value || templateObj.priority,
+            postponed_status: templateObj.postponed_status,
+            completion_date: templateObj.completionDate?.toISOString?.() || templateObj.completionDate,
+            creation_date: templateObj.creationDate?.toISOString?.() || templateObj.creationDate,
+            repeated: templateObj.repeated,
+            completed: templateObj.completed,
+            is_template: templateObj.is_template
+        }
+
+        let response
+        if (templateObj.id) {
+            response = await editTemplateApi(fullTaskObj)
+        } else {
+            response = await addTemplateApi(fullTaskObj)
+        }
+
+        dispatch(setShouldUpdateTemplates(true))
+        return response
+    }
+)

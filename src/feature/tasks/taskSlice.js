@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {getAllTasks, markTaskCompleted} from "./taskActions.js";
+import {deleteTask, getAllTasks, markTaskCompleted} from "./taskActions.js";
 import toast from "react-hot-toast";
 
 
@@ -29,11 +29,19 @@ export const taskSlice = createSlice({
                 state.tasks = action.payload
             })
             .addCase(markTaskCompleted.fulfilled, (state, action) => {
-                console.log("Successfully deleted task: " + action.payload.id)
+                console.log("Congrats! You complete task: " + action.payload.id)
                 state.shouldUpdateTasks = true;
                 toast.success("Pushed to done!")
             })
             .addCase(markTaskCompleted.rejected, (state, action) => {
+                toast.error("Failed to mark task as done!")
+            })
+            .addCase(deleteTask.fulfilled, (state, action) => {
+                console.log("Successfully deleted task: " + action.payload.id)
+                state.shouldUpdateTasks = true;
+                toast.success("Task or template deleted!")
+            })
+            .addCase(deleteTask.rejected, (state, action) => {
                 toast.error("Failed to mark task as done!")
             })
     }

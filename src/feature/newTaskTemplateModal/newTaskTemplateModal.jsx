@@ -24,15 +24,6 @@ function NewTaskTemplateModal() {
     const templates = useSelector(selectTaskTemplates)
     const dispatch = useDispatch();
     const [templateOptions, setTemplateOptions] = useState([])
-// Template list
-//     const templates = [
-//         { id: 73, name: 'Помыть ванную и раковину', completed: 1 },
-//         { id: 74, name: 'Помыть пол в кухне', completed: 1 },
-//         { id: 75, name: 'Помыть пол в большой комнате', completed: 1 },
-//     ];
-
-
-// Transform template list to options
 
     const form = useForm({
         mode: "onTouched",
@@ -102,8 +93,7 @@ function NewTaskTemplateModal() {
                    contentClassName="add-task-template-modal-content"
                    dialogClassName="add-task-template-modal-dialog"
                    centered>
-                <Modal.Dialog
-                >
+                {/*<Modal.Dialog>*/}
                     <Modal.Header closeButton>
                         <Modal.Title>Plan based on template</Modal.Title>
                     </Modal.Header>
@@ -128,6 +118,12 @@ function NewTaskTemplateModal() {
                                             render={({field}) => (
                                                 <Select
                                                     options={templateOptions}
+                                                    styles={{
+                                                        control: (baseStyles, state) => ({
+                                                            ...baseStyles,
+                                                            borderColor: state.isFocused ? '#007bff' : '#007bff',
+                                                        }),
+                                                    }}
                                                     {...field}
                                                     onChange={(selectedOption) => {
                                                         handleSelectChangeRhk(templateOptions, field, 'taskTemplateValue', setValue, trigger)(selectedOption);
@@ -210,7 +206,7 @@ function NewTaskTemplateModal() {
                             </div>
                         </Form>
                     </Modal.Body>
-                </Modal.Dialog>
+                {/*</Modal.Dialog>*/}
             </Modal>
         </div>
     )

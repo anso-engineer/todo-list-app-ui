@@ -19,3 +19,9 @@ export const editTaskApi = async (taskObj) => {
     const response = await api.put(`/tasks/${taskObj.id}`, taskObj)
     return response.data
 }
+
+
+export const deleteTaskApi = async (taskObj) => {
+    const response = await api.delete(`/tasks/${taskObj.id}`, taskObj)
+    return response.data
+}

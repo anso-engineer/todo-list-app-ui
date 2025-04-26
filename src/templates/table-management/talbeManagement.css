@@ -1,0 +1,23 @@
+.action-button {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+}
+
+.action-button-separate {
+
+}
+
+.table-outline {
+    width: 1200px;
+    height: 700px;
+}
+
+
+/*.kvthUX {*/
+/*    flex-grow: 0 !important;  !* Don't allow the column to grow *!*/
+/*    flex-shrink: 0 ;  !* Prevent shrinking *!*/
+/*    !*flex-basis: 200px;  !* Set an initial size for the column *!*!*/
+/*    !*min-width: 100px;  !* Set a minimum width *!*!*/
+/*    !*max-width: 300px;  !* Optional: Set a maximum width *!*!*/
+/*}*/
