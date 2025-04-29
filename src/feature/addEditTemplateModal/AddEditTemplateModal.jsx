@@ -20,7 +20,7 @@ const priorityOptions = [
 ]
 
 
-const postponedOptions = [
+const booleanOptions = [
     {value: "0", label: 'False'},
     {value: "1", label: 'True'},
 ]
@@ -42,9 +42,10 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
             description: '',
             complexity: '',
             priority: '',
-            creationDate: null,
+            creationDate: new Date().toISOString(),
             completionDate: null,
             is_template: '',
+            completed: 1,
             postponed_status: 0,
             repeated: '0'
         },
@@ -63,10 +64,12 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                 priority: priorityOptions.find(opt =>
                     opt.value === (initialData?.priority?.value || initialData?.priority)
                 ) || '',
-                creationDate: parseDate(initialData?.creation_date) || null,
+                creationDate: parseDate(initialData?.creation_date) || new Date().toISOString(),
                 completionDate: parseDate(initialData?.completion_date) || null,
                 is_template: initialData?.is_template || '',
-                postponed_status: postponedOptions.find(opt =>
+                completed: booleanOptions.find(opt =>
+                    opt.value == initialData?.completed) || 1,
+                postponed_status: booleanOptions.find(opt =>
                     opt.value == initialData?.postponed_status) || '',
                 repeated: initialData?.repeated ?? ''
             })
@@ -257,6 +260,29 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                         />
                     </div>
 
+
+                    <div className="mb-3">
+                        <label className="form-label">Completed</label>
+                        <Controller
+                            name="completed"
+                            control={control}
+                            render={({field}) => (
+                                <Select
+                                    {...field}
+                                    options={booleanOptions} //simple true false
+                                    classNamePrefix="react-select"
+                                    placeholder="Select completion"
+                                    styles={{
+                                        control: (baseStyles, state) => ({
+                                            ...baseStyles,
+                                            borderColor: state.isFocused ? '' : '#007bff',
+                                        }),
+                                    }}
+                                />
+                            )}
+                        />
+                    </div>
+
                     <div className="mb-3">
                         <label className="form-label">Postponed</label>
                         <Controller
@@ -265,7 +291,7 @@ function AddEditTemplateModal({isShown, onClose, onSave, initialData = {}}) {
                             render={({field}) => (
                                 <Select
                                     {...field}
-                                    options={postponedOptions}
+                                    options={booleanOptions}
                                     classNamePrefix="react-select"
                                     placeholder="Select complexity"
                                     styles={{

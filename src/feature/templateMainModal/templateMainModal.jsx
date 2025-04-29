@@ -43,6 +43,7 @@ function TemplateMainModal() {
                                                      is_template,
                                                      creation_date,
                                                      completion_date,
+                                                     completed,
                                                      postponed_status,
                                                      complexity,
                                                      priority,
@@ -57,6 +58,7 @@ function TemplateMainModal() {
             priority,
             creation_date,
             completion_date,
+            completed,
             postponed_status,
             repeated
         }));
