@@ -14,6 +14,7 @@ import './newTaskModal.css'
 import {handleDropdownChangeRhk} from "../../utils/handlers.js";
 import {addNewTask, editTask} from "./newTaskModalAction.js";
 import {useEffect} from "react";
+import TiptapEditor from "../../templates/TipTapEditor/TipTapEditor.jsx";
 
 export const priorityOptions = [
     {value: 'Low', label: 'Low'},
@@ -190,8 +191,9 @@ function NewTaskModal() {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <label className="mb-2">Description</label>
-                                <textarea
-                                    style={{height: "250px"}}
+                                <Controller
+                                    name="notes"
+                                    control={control}
                                     {...register("description", {
                                         // required: "Empty description not allowed",
                                         validate: {
@@ -199,8 +201,14 @@ function NewTaskModal() {
                                                 value.length <= 1000 || `You exceeded the title length by ${value.length - 1000} symbols`,
                                         },
                                     })}
-                                    className="form-control border-primary align-top"
-                                    placeholder="Your original description"
+                                    rules={{ required: 'Notes are required' }}
+                                    render={({ field }) => (
+                                        <TiptapEditor
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            error={errors.notes}
+                                        />
+                                    )}
                                 />
                                 {errors.description &&
                                     <span className="text-danger">{errors.description.message}</span>}
