@@ -15,9 +15,10 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={
-                        <MainView />
-                    }></Route>
-                    <Route path="/tasks/" element={<Tasks />} />
+                        <MainView/>
+                    }>
+                    </Route>
+                    <Route path="/tasks/" element={<Tasks/>}/>
                 </Routes>
             </BrowserRouter>
         </div>

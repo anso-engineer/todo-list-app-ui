@@ -33,3 +33,24 @@ export function parseDate(dateStr) {
     date = new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
     return isNaN(date) ? null : date;
 }
+
+
+export function startOfDay(d) {
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+
+function parseCustomDate(dateStr) {
+    if (!dateStr) return null;
+    const [d, t = "00:00:00"] = dateStr.trim().split(" ");
+    const [day, month, year] = d.split(".").map(Number);
+    const [hh = 0, mm = 0, ss = 0] = t.split(":").map(Number);
+    const dt = new Date(year, (month ?? 1) - 1, day, hh, mm, ss); // локальний час
+    return isNaN(dt.getTime()) ? null : dt;
+}
+
+export function toDate(input){
+    if (input instanceof Date) return input;
+    if (typeof input === "string") return parseCustomDate(input);
+    return null;
+}

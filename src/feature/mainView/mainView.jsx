@@ -11,10 +11,18 @@ import {
     selectIsTemplateModalShown,
     setIsTemplateModalShown
 } from "../newTaskTemplateModal/newTaskTemplateModalSlice.js";
-import {selectCurrentFilterMode, setCurrentFilterMode} from "../tasks/taskSlice.js";
+import {
+    selectCurrentContextState,
+    selectCurrentFilterMode,
+    setCurrentContextState,
+    setCurrentFilterMode
+} from "../tasks/taskSlice.js";
 import {setIsTemplateMainModalShown} from "../templateMainModal/templateMainModalSlice.js";
 import TemplateMainModal from "../templateMainModal/templateMainModal.jsx";
 import AddEditTemplateModal from "../addEditTemplateModal/AddEditTemplateModal.jsx";
+import {getActiveTasks, getCompletedTasks, getOnlyCreatedTasks} from "../tasks/taskActions.js";
+import {getCompletedTasksApi} from "../../api/tasksApi.js";
+import log from "eslint-plugin-react/lib/util/log.js";
 
 function MainView() {
 
@@ -23,6 +31,8 @@ function MainView() {
     const addNewTaskTemplateModalIsShown = useSelector(selectIsTemplateModalShown);
     const templateModalIsShown = useSelector(selectIsTemplateModalShown)
     const currentFilterMode = useSelector(selectCurrentFilterMode); // Get selected filter mode
+    const currentContextState = useSelector(selectCurrentContextState);
+
 
     const handleFilterChange = (mode) => {
         if (currentFilterMode === mode) {
@@ -78,7 +88,7 @@ function MainView() {
                 <Button
                     onClick={() => handleFilterChange("yesterday")}
                     className={`${currentFilterMode === "yesterday" ? "filter-button-active" : "filter-button-regular"}`}
-                    >
+                >
                     Yesterday
                 </Button>
                 <Button
@@ -94,12 +104,47 @@ function MainView() {
                     Series
                 </Button>
             </div>
+            <div className="state-toolbox">
+                <button
+                    className={`state-toolbox-btn ${currentContextState === 'only-created' ? 'current-selected-state' : ''}`}
+                    onClick={() => {
+                        console.log("clicked on Only Created")
+                        dispatch(setCurrentContextState("only-created"))
+                        dispatch(getOnlyCreatedTasks())
+                    }}
+                >
+                    <i className="bi bi-box-seam"></i> {/* Shelf */}
+                </button>
+                <button
+                    className={`state-toolbox-btn ${currentContextState === 'active' ? 'current-selected-state' : ''}`}
+                    onClick={() => {
+                        console.log("clicked on Active")
+                        dispatch(setCurrentContextState("active"))
+                        dispatch(getActiveTasks())
+                    }
+                    }
+                >
+                    <i className="bi bi-table"></i> {/* Table */}
+                </button>
+                <button
+                    className={`state-toolbox-btn ${currentContextState === 'completed' ? 'current-selected-state' : ''}`}
+                    onClick={() => {
+                        console.log("clicked on Completed")
+                        dispatch(setCurrentContextState("completed"))
+                        dispatch(getCompletedTasks())
+                    }
+                    }>
+                    <i className="bi bi-building"></i> {/* Basement */}
+                </button>
+            </div>
             <div>
                 <NewTaskModal isShown/>
                 <NewTaskTemplateModal isShown/>
                 <TemplateMainModal/>
                 <AddEditTemplateModal/>
-                <Tasks/>
+                <div className="cards-container">
+                    <Tasks/>
+                </div>
             </div>
 
         </div>)

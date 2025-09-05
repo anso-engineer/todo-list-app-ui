@@ -1,12 +1,40 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {deleteTaskApi, getAllTasksApi, markTaskCompletedApi} from "../../api/tasksApi.js";
+import {
+    deleteTaskApi,
+    getActiveTasksApi,
+    getAllTasksApi,
+    getCompletedTasksApi, getOnlyCreatedTasksApi,
+    markTaskCompletedApi
+} from "../../api/tasksApi.js";
 import {getFormattedDateTime} from "../../utils/datetime.js";
 
 export const getAllTasks = createAsyncThunk(
     "getTasks",
     async (value) => {
-        const reponse = getAllTasksApi()
-        return reponse
+        const response = getAllTasksApi()
+        return response
+    })
+
+
+export const getActiveTasks = createAsyncThunk(
+    "getActiveTasks",
+    async (value) => {
+        const response = getActiveTasksApi()
+        return response
+    })
+
+export const getCompletedTasks = createAsyncThunk(
+    "getCompletedTasks",
+    async (value) => {
+        const response = getCompletedTasksApi()
+        return response
+    })
+
+export const getOnlyCreatedTasks = createAsyncThunk(
+    "getOnlyCreatedTasks",
+    async (value) => {
+        const response = getOnlyCreatedTasksApi()
+        return response
     })
 
 
@@ -18,14 +46,14 @@ export const markTaskCompleted = createAsyncThunk(
             "id": id, "completed": 1,
             "completion_date": getFormattedDateTime(currentDate, "DD.MM.YYYY HH:mm:ss")
         };
-        const reponse = markTaskCompletedApi(taskObj)
-        return reponse
+        const response = markTaskCompletedApi(taskObj)
+        return response
     })
 
 
 export const deleteTask = createAsyncThunk(
     "deleteTask",
     async (taskObj) => {
-        const reponse = deleteTaskApi(taskObj)
-        return reponse
+        const response = deleteTaskApi(taskObj)
+        return response
     })
