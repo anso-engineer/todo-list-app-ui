@@ -83,7 +83,9 @@ return (
                                 creationDate={task.creation_date}
                                 priority={task.priority}
                                 complexity={task.complexity}
+                                completed={task.completed}
                                 isTemplate={task.is_template}
+                                onlyCreated={task.only_created}
                                 doneBtn={task.completed}
                             />
                         )

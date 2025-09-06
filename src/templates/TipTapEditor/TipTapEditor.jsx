@@ -14,10 +14,17 @@ export default function TiptapEditor({ value, onChange, error }) {
   });
 
   useEffect(() => {
-    if (editor && value) {
-      editor.commands.setContent(value);
+    if (!editor) return;
+
+    // allow empty string; treat null/undefined as ''
+    const incoming = value ?? '';
+    const current = editor.getHTML();
+
+    // avoid cursor jumps & feedback loops
+    if (incoming !== current) {
+      editor.commands.setContent(incoming, false); // false => don't emit onUpdate
     }
-  }, [editor]);
+  }, [value, editor]);
 
   const addBulletList = () => editor?.chain().focus().toggleBulletList().run();
   const addOrderedList = () => editor?.chain().focus().toggleOrderedList().run();
@@ -26,8 +33,6 @@ export default function TiptapEditor({ value, onChange, error }) {
 
   return (
       <div className="mb-3">
-        <label className="form-label">Notes</label>
-
         <div className="d-flex gap-2 mb-2">
           <button type="button" className="btn btn-sm btn-outline-secondary" onClick={addBold}>Bold</button>
           <button type="button" className="btn btn-sm btn-outline-secondary" onClick={addItalic}>Italic</button>
