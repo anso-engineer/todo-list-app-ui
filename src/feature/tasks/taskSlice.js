@@ -1,12 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
-import {deleteTask, getAllTasks, markTaskCompleted} from "./taskActions.js";
+import {
+    deleteTask,
+    getActiveTasks,
+    getAllTasks,
+    getCompletedTasks,
+    getOnlyCreatedTasks,
+    markTaskCompleted
+} from "./taskActions.js";
 import toast from "react-hot-toast";
 
 
 const initialState = {
     tasks: [],
-    currentFilterMode: [],
-    shouldUpdateTasks: false
+    currentFilterMode: "",
+    shouldUpdateTasks: false,
+    currentContextState: "active",
 }
 
 export const taskSlice = createSlice({
@@ -21,12 +29,27 @@ export const taskSlice = createSlice({
         },
         setCurrentFilterMode(state, action) {
             state.currentFilterMode = action.payload
+        },
+        setCurrentContextState(state, action) {
+            state.currentContextState = action.payload;
         }
     },
     extraReducers: (builder) => {
         builder
             .addCase(getAllTasks.fulfilled, (state, action) => {
                 state.tasks = action.payload
+            })
+            .addCase(getCompletedTasks.fulfilled, (state, action) => {
+                state.tasks = action.payload
+                state.shouldUpdateTasks = true
+            })
+            .addCase(getActiveTasks.fulfilled, (state, action) => {
+                state.tasks = action.payload
+                state.shouldUpdateTasks = true
+            })
+            .addCase(getOnlyCreatedTasks.fulfilled, (state, action) => {
+                state.tasks = action.payload
+                state.shouldUpdateTasks = true
             })
             .addCase(markTaskCompleted.fulfilled, (state, action) => {
                 console.log("Congrats! You complete task: " + action.payload.id)
@@ -50,9 +73,12 @@ export const taskSlice = createSlice({
 export const selectTasks = (state) => state.task.tasks
 export const selectShouldUpdateTasks = (state) => state.task.shouldUpdateTasks
 export const selectCurrentFilterMode = (state) => state.task.currentFilterMode;
+export const selectCurrentContextState = (state) => state.task.currentContextState;
 
 
-export const { setShouldUpdateTasks, setCurrentFilterMode } = taskSlice.actions
+export const { setShouldUpdateTasks, setCurrentFilterMode ,
+            setCurrentContextState
+} = taskSlice.actions
 
 
 export default taskSlice.reducer

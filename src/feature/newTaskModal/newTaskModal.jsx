@@ -192,21 +192,19 @@ function NewTaskModal() {
                             <Form.Group className="mb-3">
                                 <label className="mb-2">Description</label>
                                 <Controller
-                                    name="notes"
+                                    name="description"
                                     control={control}
                                     {...register("description", {
-                                        // required: "Empty description not allowed",
                                         validate: {
                                             maxLength: (value) =>
                                                 value.length <= 1000 || `You exceeded the title length by ${value.length - 1000} symbols`,
                                         },
                                     })}
-                                    rules={{ required: 'Notes are required' }}
                                     render={({ field }) => (
                                         <TiptapEditor
                                             value={field.value}
                                             onChange={field.onChange}
-                                            error={errors.notes}
+                                            error={errors.description}
                                         />
                                     )}
                                 />

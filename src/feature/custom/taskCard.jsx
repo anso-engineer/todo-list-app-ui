@@ -7,14 +7,26 @@ import {markTaskTemplateCompleted} from "../tasks/taskTemplateActions.js";
 import {setActionType, setIsModalShown, setTaskToEdit} from "../newTaskModal/newTaskModalSlice.js";
 import 'react-tooltip/dist/react-tooltip.css'
 import {Tooltip} from "react-tooltip";
+import {HiOutlineDocumentDuplicate} from "react-icons/hi";
+import {FaPersonRunning} from "react-icons/fa6";
+import {TbClockPause} from "react-icons/tb";
 
 
 function TaskCard({
-                      id, name, creationDate, completed, priority, complexity,
-                      isTemplate, description, doneBtn
+                      id, name, creationDate, priority, complexity,
+                      isTemplate, completed, onlyCreated, description, doneBtn
                   }) {
     const dispatch = useDispatch();
 
+    function getState() {
+        if (isTemplate == 0 && onlyCreated == 0 && completed == 0) {
+            return "active";
+        } else if (isTemplate == 0 && onlyCreated == 1 && completed == 0) {
+            return "only-created";
+        } else if (isTemplate == 0 && onlyCreated == 0 && completed == 1) {
+            return "completed";
+        }
+    }
 
     function markCompleted() {
         if (isTemplate === 1) {
@@ -92,6 +104,53 @@ function TaskCard({
                     }}
                 >
                     <MdDone size="1.5em"/>
+                </Button>
+                <Button
+                    className="justify-content-end bg-white me-5"
+                    onClick={markCompleted}
+                    style={{
+                        // backgroundColor: "#646cff",
+                        width: "16px", // Adjust the width
+                        height: "16px", // Adjust the height
+                        display: "flex", // Flexbox for centering the icon
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "0", // Ensure no extra padding
+                    }}
+                >
+                    <HiOutlineDocumentDuplicate size={14} color="black"/>
+                </Button>
+                <Button
+                    className="justify-content-end bg-white me-1"
+                    onClick={markCompleted}
+                    hidden={ (getState() === "active" || getState() === "completed" ) }
+                    style={{
+                        // backgroundColor: "#646cff",
+                        width: "16px", // Adjust the width
+                        height: "16px", // Adjust the height
+                        display: "flex", // Flexbox for centering the icon
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "0", // Ensure no extra padding
+                    }}
+                >
+                    <FaPersonRunning size={13} color="black"/>
+                </Button>
+                <Button
+                    className="justify-content-end bg-white me-1"
+                    onClick={markCompleted}
+                    hidden={ (getState() === "completed" || getState() === "only-created" ) }
+                    style={{
+                        // backgroundColor: "#646cff",
+                        width: "16px", // Adjust the width
+                        height: "16px", // Adjust the height
+                        display: "flex", // Flexbox for centering the icon
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "0", // Ensure no extra padding
+                    }}
+                >
+                    <TbClockPause size={14} color="black"/>
                 </Button>
             </div>
             {/* React Tooltip */}
