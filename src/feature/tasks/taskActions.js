@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {
-    deleteTaskApi,
+    deleteTaskApi, duplicateTaskApi,
     getActiveTasksApi,
     getAllTasksApi,
     getCompletedTasksApi, getOnlyCreatedTasksApi,
@@ -47,6 +47,16 @@ export const markTaskCompleted = createAsyncThunk(
             "completion_date": getFormattedDateTime(currentDate, "DD.MM.YYYY HH:mm:ss")
         };
         const response = markTaskCompletedApi(taskObj)
+        return response
+    })
+
+export const duplicateTask = createAsyncThunk(
+    "TaskDuplicated",
+    async (id) => {
+        const taskObj = {
+            "id": id
+        };
+        const response = duplicateTaskApi(taskObj)
         return response
     })
 

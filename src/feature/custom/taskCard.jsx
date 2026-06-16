@@ -2,7 +2,7 @@ import "./taskCard.css"
 import {Button} from "react-bootstrap";
 import {MdClose, MdDone} from "react-icons/md";
 import {useDispatch} from "react-redux";
-import {markTaskCompleted} from "../tasks/taskActions.js";
+import {duplicateTask, markTaskCompleted} from "../tasks/taskActions.js";
 import {markTaskTemplateCompleted} from "../tasks/taskTemplateActions.js";
 import {setActionType, setIsModalShown, setTaskToEdit} from "../newTaskModal/newTaskModalSlice.js";
 import 'react-tooltip/dist/react-tooltip.css'
@@ -105,9 +105,10 @@ function TaskCard({
                 >
                     <MdDone size="1.5em"/>
                 </Button>
+                {/*Duplicated*/}
                 <Button
                     className="justify-content-end bg-white me-5"
-                    onClick={markCompleted}
+                    onClick={() => { dispatch(duplicateTask(id)) }}
                     style={{
                         // backgroundColor: "#646cff",
                         width: "16px", // Adjust the width
@@ -138,7 +139,7 @@ function TaskCard({
                 </Button>
                 <Button
                     className="justify-content-end bg-white me-1"
-                    onClick={markCompleted}
+                    // onClick={duplicateTask}
                     hidden={ (getState() === "completed" || getState() === "only-created" ) }
                     style={{
                         // backgroundColor: "#646cff",
