@@ -3,10 +3,11 @@ import {
     deleteTaskApi, duplicateTaskApi,
     getActiveTasksApi,
     getAllTasksApi,
-    getCompletedTasksApi, getOnlyCreatedTasksApi,
-    markTaskCompletedApi
+    getCompletedTasksApi, getOnlyCreatedTasksApi, markTaskStateApi,
 } from "../../api/tasksApi.js";
 import {getFormattedDateTime} from "../../utils/datetime.js";
+import {setShouldUpdateTasks} from "./taskSlice.js";
+
 
 export const getAllTasks = createAsyncThunk(
     "getTasks",
@@ -40,30 +41,61 @@ export const getOnlyCreatedTasks = createAsyncThunk(
 
 export const markTaskCompleted = createAsyncThunk(
     "markTaskCompleted",
-    async (id) => {
+    async (id, {dispatch}) => {
         const currentDate = new Date();
         const taskObj = {
             "id": id, "completed": 1,
             "completion_date": getFormattedDateTime(currentDate, "DD.MM.YYYY HH:mm:ss")
         };
-        const response = markTaskCompletedApi(taskObj)
+        const response = await markTaskStateApi(taskObj)
+        dispatch(setShouldUpdateTasks(true))
         return response
     })
 
+
+export const markTaskActive = createAsyncThunk(
+    "markTaskActive",
+    async (id, {dispatch}) => {
+        const taskObj = {
+            "id": id,
+            "completed": 0,
+            "only_created": 0
+        };
+        const response = await markTaskStateApi(taskObj)
+        dispatch(setShouldUpdateTasks(true))
+        return response
+    })
+
+export const markTaskPostponed = createAsyncThunk(
+    "markTaskPostponed",
+    async (id, {dispatch}) => {
+        const taskObj = {
+            "id": id,
+            "completed": 0,
+            "only_created": 1
+        };
+        const response = await markTaskStateApi(taskObj)
+        dispatch(setShouldUpdateTasks(true))
+        return response
+    })
+
+
 export const duplicateTask = createAsyncThunk(
     "TaskDuplicated",
-    async (id) => {
+    async (id, {dispatch}) => {
         const taskObj = {
             "id": id
         };
-        const response = duplicateTaskApi(taskObj)
+        const response = await duplicateTaskApi(taskObj)
+        dispatch(setShouldUpdateTasks(true))
         return response
     })
 
 
 export const deleteTask = createAsyncThunk(
     "deleteTask",
-    async (taskObj) => {
+    async (taskObj, {dispatch}) => {
         const response = deleteTaskApi(taskObj)
+        dispatch(setShouldUpdateTasks(true))
         return response
     })

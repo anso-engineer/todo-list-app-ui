@@ -2,8 +2,12 @@ import "./taskCard.css"
 import {Button} from "react-bootstrap";
 import {MdClose, MdDone} from "react-icons/md";
 import {useDispatch} from "react-redux";
-import {duplicateTask, markTaskCompleted} from "../tasks/taskActions.js";
-import {markTaskTemplateCompleted} from "../tasks/taskTemplateActions.js";
+import {duplicateTask, markTaskActive, markTaskCompleted, markTaskPostponed} from "../tasks/taskActions.js";
+import {
+    markTaskTemplateActive,
+    markTaskTemplateCompleted,
+    markTaskTemplatePostponed
+} from "../tasks/taskTemplateActions.js";
 import {setActionType, setIsModalShown, setTaskToEdit} from "../newTaskModal/newTaskModalSlice.js";
 import 'react-tooltip/dist/react-tooltip.css'
 import {Tooltip} from "react-tooltip";
@@ -33,6 +37,25 @@ function TaskCard({
             dispatch(markTaskTemplateCompleted(id))
         } else {
             dispatch(markTaskCompleted(id))
+        }
+    }
+
+
+    function markActive() {
+        if (isTemplate === 1) {
+            dispatch(markTaskTemplateActive(id))
+        } else {
+            dispatch(markTaskActive(id))
+        }
+    }
+
+
+    function markPostponed() {
+        if (isTemplate === 1) {
+            dispatch(markTaskTemplatePostponed(id))
+        } else {
+            dispatch(markTaskPostponed(id))
+            console.log("Make postponed")
         }
     }
 
@@ -123,7 +146,7 @@ function TaskCard({
                 </Button>
                 <Button
                     className="justify-content-end bg-white me-1"
-                    onClick={markCompleted}
+                    onClick={markActive}
                     hidden={ (getState() === "active" || getState() === "completed" ) }
                     style={{
                         // backgroundColor: "#646cff",
@@ -139,7 +162,7 @@ function TaskCard({
                 </Button>
                 <Button
                     className="justify-content-end bg-white me-1"
-                    // onClick={duplicateTask}
+                    onClick={markPostponed}
                     hidden={ (getState() === "completed" || getState() === "only-created" ) }
                     style={{
                         // backgroundColor: "#646cff",

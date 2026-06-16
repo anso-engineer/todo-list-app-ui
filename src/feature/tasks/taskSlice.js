@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {
-    deleteTask,
+    deleteTask, duplicateTask,
     getActiveTasks,
     getAllTasks,
     getCompletedTasks,
-    getOnlyCreatedTasks,
-    markTaskCompleted
+    getOnlyCreatedTasks, markTaskActive,
+    markTaskCompleted, markTaskPostponed
 } from "./taskActions.js";
 import toast from "react-hot-toast";
 
@@ -41,20 +41,29 @@ export const taskSlice = createSlice({
             })
             .addCase(getCompletedTasks.fulfilled, (state, action) => {
                 state.tasks = action.payload
-                state.shouldUpdateTasks = true
+                // state.shouldUpdateTasks = true
             })
             .addCase(getActiveTasks.fulfilled, (state, action) => {
                 state.tasks = action.payload
-                state.shouldUpdateTasks = true
+                // state.shouldUpdateTasks = true
             })
             .addCase(getOnlyCreatedTasks.fulfilled, (state, action) => {
                 state.tasks = action.payload
-                state.shouldUpdateTasks = true
+                // state.shouldUpdateTasks = true
             })
             .addCase(markTaskCompleted.fulfilled, (state, action) => {
                 console.log("Congrats! You complete task: " + action.payload.id)
                 state.shouldUpdateTasks = true;
                 toast.success("Pushed to done!")
+            })
+            .addCase(markTaskPostponed.fulfilled, (state, action) => {
+                state.shouldUpdateTasks = true;
+            })
+            .addCase(markTaskActive.fulfilled, (state, action) => {
+                state.shouldUpdateTasks = true;
+            })
+            .addCase(duplicateTask.fulfilled, (state, action) => {
+                state.shouldUpdateTasks = true;
             })
             .addCase(markTaskCompleted.rejected, (state, action) => {
                 toast.error("Failed to mark task as done!")

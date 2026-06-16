@@ -21,8 +21,14 @@ export const getOnlyCreatedTasksApi = async () => {
 }
 
 
-export const markTaskCompletedApi = async (taskObj) => {
+// export const markTaskCompletedApi = async (taskObj) => {
+//     const response = await api.put(`/tasks/${taskObj.id}`, taskObj)
+//     return response.data
+// }
+
+export const markTaskStateApi = async (taskObj) => {
     const response = await api.put(`/tasks/${taskObj.id}`, taskObj)
+    console.log("Called Mark task state")
     return response.data
 }
 
